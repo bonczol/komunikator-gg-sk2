@@ -12,6 +12,7 @@
 #define BUF_SIZE 1024
 #define NUM_THREADS     5
 
+
 //struktura zawierająca dane, które zostaną przekazane do wątku
 pthread_mutex_t example_mutex = PTHREAD_MUTEX_INITIALIZER;
 struct thread_data_t

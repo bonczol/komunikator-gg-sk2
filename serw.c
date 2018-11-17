@@ -24,6 +24,9 @@ int socket;
 };
 int sockets[2] = {1,1};
 
+std::list<string> clients;
+std::list<int> sockets;
+
 //funkcja opisującą zachowanie wątku - musi przyjmować argument typu (void *) i zwracać (void *)
 void *ThreadBehavior1(void *t_data)
 {
@@ -31,10 +34,14 @@ void *ThreadBehavior1(void *t_data)
     struct thread_data_t *th_data = (struct thread_data_t*)t_data;
     memset((*th_data).buf, 0, sizeof (*th_data).buf);
     while (read( (*th_data).socket, (*th_data).buf, 100) > 0){
-      int i = (*th_data).socket;
-      for(int j = 0; j < 2; j++){
-          if(i!=sockets[j]) write(sockets[j], (*th_data).buf, 100);
+      printf("Dlugosc: %ld\n", strlen((*th_data).buf));
+      if (strlen(th_data -> buf) > 1) {
+        int i = (*th_data).socket;
+        for(int j = 0; j < 2; j++){
+            if(i!=sockets[j]) write(sockets[j], (*th_data).buf, 100);
+        }
       }
+      memset((*th_data).buf, 0, sizeof (*th_data).buf);
     }
     close((*th_data).socket);
     free(th_data);
@@ -45,8 +52,6 @@ void *ThreadBehavior1(void *t_data)
 //funkcja obsługująca połączenie z nowym klientem
 void handleConnection(int csd) {
     //wynik funkcji tworzącej wątek
-    printf("%d\n", csd);
-    
     pthread_t thread;
     struct thread_data_t * t_data = malloc(sizeof(struct thread_data_t));
     (*t_data).socket = csd;
@@ -91,10 +96,9 @@ int main(int argc, char* argv[])
    int i = 0;
    while(1)
    {
-       printf("start petli\n");
        connection_socket_descriptor = accept(server_socket_descriptor, NULL, NULL);
+       printf("elo\n");
        sockets[i++] = connection_socket_descriptor;
-       printf("%d %d\n", sockets[0], sockets[1]);
        handleConnection(connection_socket_descriptor);
        if (i == 2) i = 0;
        
