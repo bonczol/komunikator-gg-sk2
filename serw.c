@@ -11,21 +11,19 @@
 #include <string.h>
 #include <time.h>
 #include <pthread.h>
+#include <Klient.h>
 
 #define SERVER_PORT 1234
 #define QUEUE_SIZE 5
-
+#include
 //struktura zawierająca dane, które zostaną przekazane do wątku
 struct thread_data_t
 {
 char buf[100];
 int socket;
-
 };
-int sockets[2] = {1,1};
 
-std::list<string> clients;
-std::list<int> sockets;
+std::list<Klient> clients;
 
 //funkcja opisującą zachowanie wątku - musi przyjmować argument typu (void *) i zwracać (void *)
 void *ThreadBehavior1(void *t_data)
@@ -36,9 +34,10 @@ void *ThreadBehavior1(void *t_data)
     while (read( (*th_data).socket, (*th_data).buf, 100) > 0){
       printf("Dlugosc: %ld\n", strlen((*th_data).buf));
       if (strlen(th_data -> buf) > 1) {
-        int i = (*th_data).socket;
-        for(int j = 0; j < 2; j++){
-            if(i!=sockets[j]) write(sockets[j], (*th_data).buf, 100);
+        int i = th_data -> socket;
+        for (std::list<string>::iterator it = data.begin(); it != data.end(); ++it){
+    		std::cout << it -> nick;
+            if(i != it -> socket) write(it -> socket, th_data -> buf, 100);
         }
       }
       memset((*th_data).buf, 0, sizeof (*th_data).buf);
@@ -57,6 +56,27 @@ void handleConnection(int csd) {
     (*t_data).socket = csd;
     pthread_create(&thread, NULL, ThreadBehavior1, t_data);
 }
+
+void accept_new_client(int csd){
+	char buf[100];
+    read(csd, buf, 100);
+    str_buf = string(buf);
+    int sep = str_buf.find_first_of("|");
+    nick = str_buf.substr(0, sep);
+    login = str_buf.substr(sep + 1, str_buf.length - sep - 1);
+    for (std::list<Klient>::iterator it = clients.begin(); it != clients.end(); ++it){
+    	std::cout << it -> login;
+    	if (it -> login == login){
+    		it -> logged_in = true;
+    		it -> socket = csd;
+    		return;
+    	}
+	}
+	Klient k(nick, login, csd);
+	k.numer = (rand() % 10)*100 + (rand() % 10) * 10 + (rand() % 10);
+	return;
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -93,14 +113,12 @@ int main(int argc, char* argv[])
        fprintf(stderr, "%s: Błąd przy próbie ustawienia wielkości kolejki.\n", argv[0]);
        exit(1);
    }
-   int i = 0;
    while(1)
    {
        connection_socket_descriptor = accept(server_socket_descriptor, NULL, NULL);
+       accept_new_client(connection_socket_descriptor);
        printf("elo\n");
-       sockets[i++] = connection_socket_descriptor;
        handleConnection(connection_socket_descriptor);
-       if (i == 2) i = 0;
        
    }
 
