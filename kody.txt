@@ -1,0 +1,24 @@
+100 - wiadomosc
+101 - logowanie
+102 - wylogowanie
+103 - rejestracja
+104 - wyszukiwanie po loginie
+105 - dodawanie do znajomych
+106 - wysy³anie listy znajomych
+
+400 - logowanie udane
+401 - logowanie nieudane
+402 - rejestracja udana
+403 - rejestracja nieudana
+
+100|login1,login2,...|wiadomosc		response: 400|0 lub 400|1
+101|login|haslo						response: 401|0 lub 401|1
+102|								response: 402|0 lub 402|1
+103|nick|login|haslo				response: 403|0 lub 403|1
+104|login							response: 404|0 lub 404|nick
+105|login							response: 405|0 lub 405|1 - niepowodzenie/powodzenie
+106|								response: 406|0 lub 406|nick1,login1|nick2,login2|...
+
+
+format klienci.txt:
+nick|login|haslo|friend1_login,friend2_login,friend3_login

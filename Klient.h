@@ -1,18 +1,21 @@
-#include <string>
+#pragma once
+#include "pch.h"
+#include <string.h>
 #include <stdlib.h>
-class Client{
-public:
-	string nick;
-	string login;
-	bool logged_in;
-	string numer;
-	int socket;
-	Client(string a, string b, int c);
-}
+#include <stdio.h>
+#include <iostream>
+#include <conio.h>
+#include <list>
 
-Client::Client(string a, string b, int c){
-	nick = a;
-	login = b;
-	logged_in = true;
-	socket = c;
-}
+class Klient {
+public:
+	std::string nick;
+	std::string login;
+	std::string password;
+	bool logged_in;
+	int socket;
+	std::list<Klient*> friends;
+	Klient();
+	Klient(std::string nick, std::string login, std::string password,
+		bool logged_in = false, int socket = -1);
+};
