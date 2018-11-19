@@ -18,7 +18,7 @@
 104|login							response: 404|0 lub 404|nick
 105|login							response: 405|0 lub 405|1 - niepowodzenie/powodzenie
 106|								response: 406|0 lub 406|nick1,login1|nick2,login2|...
-
+									500|wiadomosc
 
 format klienci.txt:
 nick|login|haslo|friend1_login,friend2_login,friend3_login
