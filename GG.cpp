@@ -19,6 +19,7 @@
 #include <fstream>
 #include <utility>
 #include "Responder.h"
+#include "ServerSerializer.h"
 
 #define SERVER_PORT 1337
 #define QUEUE_SIZE 5
@@ -30,13 +31,14 @@ struct thread_data_t
 	int socket;
 };
 
-std::list<Klient*>* clients;
+
+
 
 //funkcja opisującą zachowanie wątku - musi przyjmować argument typu (void *) i zwracać (void *)
 void *ThreadBehavior1(void *t_data){
 	pthread_detach(pthread_self());
 	int socket = (int) t_data;
-	Responder resp(socket, clients);
+	Responder resp(socket);
 	resp.readAndRespond();
 	close(socket);
 	pthread_exit(NULL);
@@ -48,62 +50,6 @@ void handleConnection(int csd) {
 	//wynik funkcji tworzącej wątek
 	pthread_t thread;
 	pthread_create(&thread, NULL, ThreadBehavior1, csd);
-}
-
-
-
-std::string join_list(std::list<std::string> list, std::string sep) {
-	std::string result;
-	for (std::string str : list) result = result + str + sep;
-	return result.substr(0, result.length - 1);
-}
-
-
-
-void send_friends_list(Klient klient, int csd) {
-	std::string result = "406|";
-	for (Klient k : klient.friends) {
-		result = result + k.nick + "," + k.login + "|";
-	}
-	result = result.substr(0, result.length - 1);
-	write(csd, result, 1000);
-	return;
-}
-
- 
-//initialize registered clients at the start
-void initialize_clients() {
-	clients = new std::list<Klient*>();
-	std::ifstream inFile;
-	inFile.open("klienci.txt");
-	if (!inFile) {
-		std::cout << "Unable to open file datafile.txt";
-		exit(1);   // call system to stop
-	}
-	std::string line;
-	std::list<std::string> nicks;
-	std::list<std::string> logins;
-	std::list<std::string> passwords;
-	std::list<std::pair<Klient*, std::list<std::string>> > friends_names_list;
-	while (inFile >> line) {
-		std::list<std::string> data = Responder::split_string(line, '|');
-		std::string nick = data.front(); data.pop_front();
-		std::string login = data.front(); data.pop_front();
-		std::string password = data.front(); data.pop_front();
-		Klient* k = new Klient(nick, login, password, false);
-		clients -> push_back(k);
-		friends_names_list.push_back(std::pair<Klient*, std::list<std::string>>
-			(k, Responder::split_string(data.front(), ',')));
-	}
-	for (const auto& klient_friends_names : friends_names_list){
-		Klient* k = klient_friends_names.first;
-		for (const auto& friend_name : klient_friends_names.second){
-			for (Klient* client : *clients) {
-				if (client -> login == friend_name) k ->friends.push_back(client);
-			}
-		}
-	}
-	return;
 }
 
 
@@ -143,16 +89,16 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	initialize_clients();
+	ServerSerializer s;
+	s.deserialize();
 	while (1)
 	{
 		connection_socket_descriptor = accept(server_socket_descriptor, NULL, NULL);
-		//accept_new_client(connection_socket_descriptor);
 		printf("elo\n");
 		handleConnection(connection_socket_descriptor);
 
 	}
-
+	s.serialize();
 	close(server_socket_descriptor);
 	return(0);
 }

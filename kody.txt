@@ -5,20 +5,22 @@
 104 - wyszukiwanie po loginie
 105 - dodawanie do znajomych
 106 - wysy³anie listy znajomych
+107 - wysylanie historii wiadomosci z wybranej konwersacji
+108 - nowa konwersacja
 
-400 - logowanie udane
-401 - logowanie nieudane
-402 - rejestracja udana
-403 - rejestracja nieudana
+500 - wiadomosc od uzytkownika o loginie login
 
-100|login1,login2,...|wiadomosc		response: 400|0 lub 400|1
-101|login|haslo						response: 401|0 lub 401|1
-102|								response: 402|0 lub 402|1
-103|nick|login|haslo				response: 403|0 lub 403|1
-104|login							response: 404|0 lub 404|nick
-105|login							response: 405|0 lub 405|1 - niepowodzenie/powodzenie
-106|								response: 406|0 lub 406|nick1,login1|nick2,login2|...
-									500|wiadomosc
+100|ID_conv|wiadomosc						response: 400|0 lub 400|1
+101|login|haslo								response: 401|0 lub 401|1
+102|										response: 402|0 lub 402|1
+103|nick|login|haslo						response: 403|0 lub 403|1
+104|login									response: 404|0 lub 404|nick
+105|login									response: 405|0 lub 405|1 - niepowodzenie/powodzenie
+106|										response: 406|0 lub 406|nick1,login1|nick2,login2...
+107|ID_conv									response: 407|0 lub 407|login1,data1,godzina1,wiadomosc1|login2,...
+108|login1|login2|login3...					response: 408|0 lub 408|ID_conv
+
+											500|login|ID_conv|data|godzina|wiadomosc
 
 format klienci.txt:
 nick|login|haslo|friend1_login,friend2_login,friend3_login
