@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="550.0" maxWidth="320.0" minHeight="550.0" minWidth="320.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.MenuController">
+    <top>
+        <VBox prefHeight="89.0" prefWidth="336.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" text="Januszek 604 532 102 " VBox.vgrow="NEVER" />
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER" />
+                        <TextArea maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" HBox.hgrow="NEVER" />
+                    </children>
+                </HBox>
+                <HBox prefHeight="68.0" prefWidth="336.0">
+                    <children>
+                        <Button mnemonicParsing="false" text="Dodaj" />
+                        <Button mnemonicParsing="false" text="Usuń" />
+                        <ToggleButton minWidth="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Friends" />
+                        <ToggleButton minWidth="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="113.0" text="Groups" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <bottom>
+        <Label prefHeight="15.0" prefWidth="395.0" text="Aktualizacja 5 min temu" BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+    </center>
+</BorderPane>

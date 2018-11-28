@@ -1,0 +1,13 @@
+100 - wiadomość
+101 - logowanie
+102 - wylogowanie
+103 - rejestracja
+104 - wyszukiwanie po loginie
+105 - dodawanie do znajomych
+106 - wysyłanie listy znajomych
+
+400 - logowanie udane
+401 - logowanie nieudane
+402 - rejestracja udana
+403 - rejestracja nieudana
+
