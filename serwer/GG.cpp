@@ -1,5 +1,4 @@
-﻿#include "pch.h"
-#include <sys/types.h>
+﻿#include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -20,9 +19,11 @@
 #include <utility>
 #include "Responder.h"
 #include "ServerSerializer.h"
+#include <signal.h>
 
 #define SERVER_PORT 1337
 #define QUEUE_SIZE 5
+bool WORK = true;
 
 //struktura zawierająca dane, które zostaną przekazane do wątku
 struct thread_data_t
@@ -32,15 +33,14 @@ struct thread_data_t
 };
 
 
-
-
 //funkcja opisującą zachowanie wątku - musi przyjmować argument typu (void *) i zwracać (void *)
 void *ThreadBehavior1(void *t_data){
 	pthread_detach(pthread_self());
-	int socket = (int) t_data;
-	Responder resp(socket);
+	int* socket = (int*) t_data;
+	Responder resp(*socket);
+	cout << "iema" <<endl;
 	resp.readAndRespond();
-	close(socket);
+	close(*socket);
 	pthread_exit(NULL);
 }
 
@@ -49,9 +49,24 @@ void *ThreadBehavior1(void *t_data){
 void handleConnection(int csd) {
 	//wynik funkcji tworzącej wątek
 	pthread_t thread;
-	pthread_create(&thread, NULL, ThreadBehavior1, csd);
+	pthread_create(&thread, NULL, ThreadBehavior1, &csd);
 }
+/*
+void kill_handler(int signal){
+	ServerSerializer s;
+	s.serialize();
+	return;
+}*/
 
+
+void* connection_accepter(void *server_socket){
+	int* server_socket_descriptor = (int*) server_socket;
+	while(1){
+		int connection_socket_descriptor = accept(*server_socket_descriptor, NULL, NULL);
+		printf("elo\n");
+		handleConnection(connection_socket_descriptor);
+	}
+}
 
 int main(int argc, char* argv[])
 {
@@ -89,16 +104,33 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
+/*
+	struct sigaction sigIntHandler;
+	sigIntHandler.sa_handler = kill_handler;
+	sigemptyset(&sigIntHandler.sa_mask);
+	sigIntHandler.sa_flags = 0;
+	sigaction(SIGINT, &sigIntHandler, NULL);*/
+
+	pthread_t thread;
+	pthread_create(&thread, NULL, connection_accepter, &server_socket_descriptor);
+
 	ServerSerializer s;
 	s.deserialize();
-	while (1)
+	cout << "Entering the loop\nTo stop the server press c+Enter\n";
+	char c;
+	while (WORK)
 	{
-		connection_socket_descriptor = accept(server_socket_descriptor, NULL, NULL);
-		printf("elo\n");
-		handleConnection(connection_socket_descriptor);
-
+		cin >> c;
+		if(c == 'c'){
+			s.serialize();
+			WORK = false;
+		}else if(c == 'k'){
+			for (auto const& x : Klient::CLIENTS){
+				std::cout << *x.second  << endl; 
+			}
+		}
+		sleep(1);
 	}
-	s.serialize();
 	close(server_socket_descriptor);
 	return(0);
 }

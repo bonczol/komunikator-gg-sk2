@@ -9,13 +9,6 @@ private:
 	std::list<Klient*> clients;
 	int ID;
 
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & messages;
-		ar & clients;
-		ar & ID;
-	}
 
 public:
 	//id konwersacji, konwersacja
@@ -28,6 +21,16 @@ public:
 	std::list<Message*> getMessages() { return this->messages; }
 	//std::map<int, Conversation*> getALL_CONVS() { return Conversation::ALL_CONVS; }
 	Conversation(std::list<Klient*> clients);
+	Conversation(){}
 	~Conversation();
+
+
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & messages;
+		ar & clients;
+		ar & ID;
+	}
 };
 

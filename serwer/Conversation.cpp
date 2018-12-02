@@ -1,6 +1,6 @@
-#include "pch.h"
 #include "Conversation.h"
 
+std::map<int, Conversation*> Conversation::ALL_CONVS;
 
 void Conversation::add_client(Klient * c){
 	this->clients.push_back(c);
@@ -13,14 +13,14 @@ void Conversation::remove_client(Klient * c){
 }
 
 void Conversation::push_message(Message * m) {
-	if (this->messages.size == MSG_HISTORY_LENGTH)
+	if (this->messages.size() == MSG_HISTORY_LENGTH)
 		this->messages.pop_back();
 	this->messages.push_front(m);
 }
 
 Conversation::Conversation(std::list<Klient*> clients){
 	this->clients = clients;
-	this->ID = ALL_CONVS.size();
+	this->ID = ALL_CONVS.size() + 100;
 	ALL_CONVS[ID] = this;
 }
 

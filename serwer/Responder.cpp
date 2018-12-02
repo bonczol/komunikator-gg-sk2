@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Responder.h"
 using namespace std;
 Responder::Responder(int socket){
@@ -8,33 +7,53 @@ Responder::Responder(int socket){
 Responder::~Responder(){}
 
 void Responder::readAndRespond(){
+	memset(this->buf, 0 , sizeof this->buf);
 	while (read(this -> socket, this ->buf, 1000) > 0) {
-		string buf = string(this->buf);
-		printf("Dlugosc: %ld\n", buf.length);
+		printf("Received: %s", this->buf);
+		std::string bufo = this->buf;
+		memset(this->buf, 0 , sizeof this->buf);
+		if(bufo.at(0)=='4') continue;
+		bufo = bufo.substr(0, bufo.length()-2);
+		cout << bufo <<  ", dlugosc:" << bufo.length() << endl;
 
 		//cutout code from received message
-		int kod = std::stoi(buf.substr(0, 3));
-		buf = buf.substr(4, buf.length - 4);
+		if(bufo.length() < 4) continue;
+		if(!isdigit(bufo.at(0)) || !isdigit(bufo.at(1)) || !isdigit(bufo.at(2)) ||
+			!bufo.at(3) == '|') continue;
+		int kod = std::stoi(bufo.substr(0, 3));
+		bufo = bufo.substr(4, bufo.length() - 4);
 
 		switch (kod){
 		case 100:
-			message(buf);
+			message(bufo);
+			break;
 		case 101:
-			login(buf);
+			login(bufo);
+			break;
 		case 102:
-			logout(buf);
+			logout(bufo);
+			break;
 		case 103:
-			user_register(buf);
+			user_register(bufo);
+			break;
 		case 104:
-			search(buf);
+			search(bufo);
+			break;
 		case 105:
-			addFriend(buf);
+			addFriend(bufo);
+			break;
 		case 106:
-			sendFriends(buf);
+			sendFriends(bufo);
+			break;
 		case 107:
-			sendHistory(buf);
+			sendHistory(bufo);
+			break;
 		case 108:
-			newConv(buf);
+			newConv(bufo);
+			break;
+		case 109:
+			change_description(bufo);
+			break;
 		default:
 			break;
 		}
@@ -48,12 +67,12 @@ void Responder::message(string buf){
 	list<string> data = split_string(buf, '|', true);
 	int ID_conv = stoi(data.front()); data.pop_front();
 	string msg = data.front();
-	if (msg.length > 1 && this->klient->logged_in) {
+	if ((msg.length() > 0) && this -> klient && this->klient->logged_in) {
 		Message* m = new Message(msg, this->klient);
 		Conversation* c = Conversation::ALL_CONVS[ID_conv];
 		c->push_message(m);
 		for (Klient* k : c->getClients()) {
-			if (k->login != this->login) sendMsg(m, k, ID_conv);
+			if (k->login != this->klient->login) sendMsg(m, k, ID_conv);
 		}
 		send_info_code("400|1");
 		return;
@@ -72,7 +91,11 @@ void Responder::login(string buf){
 		klient->second->logged_in = true;
 		klient->second->socket = this->socket;
 		this->klient = klient->second;
-		send_info_code("401|1");
+		string temp = this->klient->nick + ","+this->klient->description;
+		for(Klient* k : this->klient->friends){
+			temp = temp + "|" + k->nick+","+k->login+","+k->description+","+k->str_log();
+		}
+		send_info_code("401|"+temp);
 		return;
 	}
 	send_info_code("401|0");
@@ -80,10 +103,9 @@ void Responder::login(string buf){
 }
 
 void Responder::logout(string buf){
-	if (this->klient->logged_in) {
-		std::cout << this->klient->login;
+	if (this -> klient && this->klient->logged_in) {
 		this->klient->logged_in = false;
-		this->klient->socket = NULL;
+		this->klient->socket = -1;
 		this->klient = NULL;
 		send_info_code("402|1");
 		return;
@@ -95,7 +117,7 @@ void Responder::logout(string buf){
 }
 
 void Responder::user_register(string buf){
-	list<string> data = split_string(this->buf, '|');
+	list<string> data = split_string(buf, '|');
 	string nick = data.front(); data.pop_front();
 	string login = data.front(); data.pop_front();
 	string password = data.front(); data.pop_front();
@@ -113,14 +135,14 @@ void Responder::user_register(string buf){
 void Responder::search(string buf){
 	if (this->klient && this->klient->logged_in) {
 		string login = buf;
-		pthread_mutex_lock(Klient::clients_mutex);
+		pthread_mutex_lock(&Klient::clients_mutex);
 		std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
 		if (klient_it != Klient::CLIENTS.end()) {
-			pthread_mutex_unlock(Klient::clients_mutex);
+			pthread_mutex_unlock(&Klient::clients_mutex);
 			send_info_code("404|" + klient_it->second->nick);
 			return;
 		}
-		pthread_mutex_unlock(Klient::clients_mutex);
+		pthread_mutex_unlock(&Klient::clients_mutex);
 	}
 	send_info_code("404|0");
 	return;
@@ -129,27 +151,29 @@ void Responder::search(string buf){
 void Responder::addFriend(string buf){
 	string login = buf;
 	if (this->klient && this->klient->logged_in) {
-		pthread_mutex_lock(Klient::clients_mutex);
+		pthread_mutex_lock(&Klient::clients_mutex);
 		std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
 		if (klient_it != Klient::CLIENTS.end()) {
-			pthread_mutex_unlock(Klient::clients_mutex);
+			cout << klient_it->first << "   " << login << endl;
+			pthread_mutex_unlock(&Klient::clients_mutex);
 			this->klient->friends.push_back(klient_it->second);
-			send_info_code("405|1");
+			send_info_code("405|" + klient_it->second->nick+"|"+klient_it->second->description);
 			return;
 		}
-		pthread_mutex_unlock(Klient::clients_mutex);
+		pthread_mutex_unlock(&Klient::clients_mutex);
 	}
 	send_info_code("405|0");
 	return;
 }
 
 void Responder::sendFriends(string buf){
-	string temp;
+	string temp = "";
 	if (this->klient && this->klient->logged_in) {
 		for (Klient* k : this->klient->friends) {
-			temp = temp + klient->nick + "," + klient->login + "|";
+			temp = temp + k->nick + "," + k->login + ","+k->description+","+k->str_log()+"|";
 		}
-		temp = temp.substr(0, temp.length - 1);
+		if(temp.length() > 0)
+			temp = temp.substr(0, temp.length() - 1);
 		send_info_code("406|" + temp);
 		return;
 	}
@@ -166,6 +190,7 @@ void Responder::sendHistory(string buf) {
 		for (Message* m : c->getMessages()) {
 			buf = buf + "|" + m->toString2();
 		}
+		if(buf == "407") buf = buf + "|";
 		send_info_code(buf);
 		return;
 	}
@@ -179,22 +204,34 @@ void Responder::newConv(string buf) {
 	for (string login : logins)
 		clients.push_back(Klient::CLIENTS[login]);
 	Conversation* c = new Conversation(clients);
-	send_info_code("408|" + to_string(c->getID));
+	send_info_code("408|" + to_string(c->getID()));
+}
+
+void Responder::change_description(string buf){
+	if(this -> klient && this -> klient -> logged_in){
+		this->klient->description = buf;
+		send_info_code("409|1");
+	}else{
+		send_info_code("409|0");
+	}
+	return;
 }
 
 
 
-bool Responder::sendMsg(Message*m,  Klient* to, int id_conv) {
-	const char* msg = ("500|" + m->toString1(id_conv)).c_str();
-	write(to->socket, msg, 1000);
+bool Responder::sendMsg(Message*m, Klient* to, int id_conv) {
+	string to_send = "500|" + m->toString1(id_conv);
+	cout << to_send << endl;
+	const char* msg = to_send.c_str();
+	write(to->socket, msg, to_send.length());
 	return true;
 }
 
-list<string> Responder::split_string(string text, char sep, bool msg = false) {
-	string temp;
+list<string> Responder::split_string(string text, char sep, bool msg) {
+	string temp = "";
 	list<string> list;
-	for (size_t i = 0; i < text.length; i++) {
-		if (text[i] != sep || (msg && list.size == 2))
+	for (size_t i = 0; i < text.length(); i++) {
+		if (text[i] != sep || (msg && list.size() == 1))
 			temp = temp + text[i];
 		else {
 			list.push_back(string(temp));
@@ -206,23 +243,28 @@ list<string> Responder::split_string(string text, char sep, bool msg = false) {
 }
 
 void Responder::send_info_code(string code) {
+	cout << code << endl;
 	const char* c = code.c_str();
-	write(this -> socket, c, 1000);
+	write(this -> socket, c, code.length());
 	return;
 }
 
 bool Responder::check_registration_validity(string nick, string login, string password)
 {
 	char separators[] = { ',', '.', '|', '\\', '\'', '\"'};
-	bool n = nick.length > 1 && !contains(nick, separators);
-	bool l = login.length > 1 && !contains(login, separators);
-	bool p = password.length > 1 && !contains(password, separators);
-	return n && l && p;
+	bool n = nick.length() > 1 && !contains(nick, separators);
+	bool l = login.length() > 1 && !contains(login, separators);
+	bool p = password.length() > 1 && !contains(password, separators);
+	pthread_mutex_lock(&Klient::clients_mutex);
+	std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
+	bool nz = (klient_it == Klient::CLIENTS.end());
+	pthread_mutex_unlock(&Klient::clients_mutex);
+	return n && l && p && nz;
 }
 
 bool Responder::contains(string text, char* chars) {
 	for (int i = 0; i < sizeof(chars)/sizeof(char); i++) {
-		for (int j = 0; j < text.length; j++) {
+		for (int j = 0; j < text.length(); j++) {
 			if (text[j] == chars[i]) return true;
 		}
 	}

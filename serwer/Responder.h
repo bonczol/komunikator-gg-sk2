@@ -22,6 +22,7 @@ private:
 	void sendFriends(string buf);
 	void sendHistory(string buf);
 	void newConv(string buf);
+	void change_description(string buf);
 	
 	bool check_registration_validity(string nick, string login, string password);
 	void send_info_code(string code);

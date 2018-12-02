@@ -1,6 +1,8 @@
 #pragma once
-#include <map>
+#include <boost/serialization/map.hpp>
 #include "Conversation.h"
+#include <boost/serialization/list.hpp>
+
 class ServerSerializer
 {
 private:

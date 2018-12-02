@@ -11,7 +11,7 @@ void ServerSerializer::serialize() {
 
 void ServerSerializer::deserialize()
 {
-	std::ifstream ifs("serializeServer.txt");
+	std::ifstream ifs("serializedServer.txt");
 	boost::archive::text_iarchive ia(ifs);
 	ia >> *this;
 	Conversation::ALL_CONVS = this->ALL_CONVS;

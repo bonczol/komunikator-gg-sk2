@@ -11,6 +11,15 @@ private:
 	std::string time;
 	Klient* sender;
 
+public:
+	Message(std::string msg, Klient* sender);
+	Message(){}
+	std::string getMsg() { return this->msg; }
+	std::string toString1(int id_conv);
+	std::string toString2();
+	~Message();
+
+
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
@@ -19,12 +28,5 @@ private:
 		ar & time;
 		ar & sender;
 	}
-
-public:
-	Message(std::string msg, Klient* sender);
-	string getMsg() { return this->msg; }
-	string toString1(int id_conv);
-	string toString2();
-	~Message();
 };
 

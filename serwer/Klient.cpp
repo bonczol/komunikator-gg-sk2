@@ -1,23 +1,25 @@
-#include "pch.h"
 #include "Klient.h"
 using namespace std;
 
-Klient::Klient(std::string nick, std::string login, std::string password,
-		bool logged_in = false, int socket = -1) {
+pthread_mutex_t Klient::clients_mutex = PTHREAD_MUTEX_INITIALIZER;
+std::map<std::string, Klient*>Klient::CLIENTS;
+
+Klient::Klient(std::string nick, std::string login, std::string password) {
 	this -> nick = nick;
 	this->login = login;
 	this->password = password;
-	this->logged_in = logged_in;
-	this->socket = socket;
-	pthread_mutex_lock(Klient::clients_mutex);
+	this->logged_in = false;
+	this->socket = -1;
+	cout << "dodawanie" << endl;
+	pthread_mutex_lock(&Klient::clients_mutex);
 	Klient::CLIENTS[login] = this;
-	pthread_mutex_unlock(Klient::clients_mutex);
+	pthread_mutex_unlock(&Klient::clients_mutex);
+	cout << "dodano" << endl;
 }
 
-Klient::~Klient(){}
 
 //initialize registered clients at the start
-static void initialize_clients() {
+/*static void initialize_clients() {
 	Klient::CLIENTS.clear();
 	std::ifstream inFile;
 	inFile.open("klienci.txt");
@@ -47,12 +49,12 @@ static void initialize_clients() {
 		}
 	}
 	return;
-}
+}*/
 
 std::list<std::string> split_string(std::string text, char sep) {
 	std::string temp;
 	std::list<std::string> list;
-	for (size_t i = 0; i < text.length; i++) {
+	for (size_t i = 0; i < text.length(); i++) {
 		if (text[i] != sep)
 			temp = temp + text[i];
 		else {
