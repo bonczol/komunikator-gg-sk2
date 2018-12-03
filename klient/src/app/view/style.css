@@ -1,0 +1,54 @@
+.root {
+    -fx-background-color: #68A357;
+    -fx-font-family: "Lucida Sans";
+}
+
+#buttonSignIn{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+    -fx-font-size: 46px;
+}
+
+#buttonSignUpReg{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+    -fx-font-size: 46px;
+}
+
+.button:hover{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0,0,0);
+    -fx-text-fill: #F2F2F2;
+    -fx-background-color: #5C415D;
+}
+
+#buttonSignUp{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+}
+
+#buttonBack{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+}
+
+.text-field{
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-background-color: #32965D;
+    -fx-background-radius: 20px;
+}
+
+.text-field:focused{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0,0,0);
+
+}
+
+.check-box .box{
+    -fx-background-color: #32965D;
+    -fx-background-radius: 20px;
+}
+.separator *.line{
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: #32965D;
+}
