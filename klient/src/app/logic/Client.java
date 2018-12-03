@@ -17,13 +17,17 @@ public class Client {
     private Sender sender;
 
     public Client(String ipAddress, int port) {
-        try {
-            this.clientSocket = new Socket(ipAddress, port);
-            this.sender = new Sender(this.clientSocket);
-            this.receiver= new Receiver(this.clientSocket);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//
+////            this.clientSocket = new Socket(ipAddress, port);
+////            this.sender = new Sender(this.clientSocket);
+////            this.receiver= new Receiver(this.clientSocket);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        this.clientSocket = null;
+        this.sender = null;
+        this.receiver = null;
         this.user = null;
     }
 
@@ -58,7 +62,7 @@ public class Client {
                             if(sMessage.get(0).equals("0"))
                                 Main.getLoggInController().accessDenied();
                             else
-                                Main.getLoggInController().accessGranted("Janusz","Lubie chodzi do domu ", new ArrayList<User>());
+                                //Main.getLoggInController().accessGranted("Janusz","Lubie chodzi do domu ", new ArrayList<User>());
                             break;
                         case 402:
                             if(sMessage.get(0).equals("0"))

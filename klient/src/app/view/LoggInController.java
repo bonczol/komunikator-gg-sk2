@@ -42,12 +42,15 @@ public class LoggInController implements Initializable {
        Main.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
     }
 
-
-    public void accessGranted(String nickname, String description, ArrayList<User> friends) {
+    public void showMenu(){
         Stage stage = (Stage) textFieldLogin.getScene().getWindow();
         stage.setScene(new Scene(Main.getMenuRoot()));
         stage.setOnHiding( event -> {Main.getClient().getSender().sendSignOutMessage();} );
+    }
+
+    public void accessGranted(String nickname, String description, ArrayList<User> friends) {
         Main.getClient().user = new LocalUser(nickname, textFieldLogin.getText(), description, true, friends );
+        showMenu();
     }
 
     public void accessDenied(){

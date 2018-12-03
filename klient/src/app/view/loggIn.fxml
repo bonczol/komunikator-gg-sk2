@@ -13,7 +13,7 @@
       <TextField fx:id="textFieldLogin" alignment="CENTER" layoutX="55.0" layoutY="125.0" prefHeight="54.0" prefWidth="297.0" promptText="LOGIN" />
       <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="55.0" layoutY="198.0" prefHeight="54.0" prefWidth="297.0" promptText="PASSWORD" />
       <CheckBox layoutX="88.0" layoutY="279.0" mnemonicParsing="false" text="Auto logg in" />
-      <Button fx:id="buttonSignIn" alignment="CENTER" layoutX="35.0" layoutY="408.0" mnemonicParsing="false" onAction="#accessGranted" prefHeight="54.0" prefWidth="325.0" text="sign in" />
+      <Button fx:id="buttonSignIn" alignment="CENTER" layoutX="35.0" layoutY="408.0" mnemonicParsing="false" onAction="#showMenu" prefHeight="54.0" prefWidth="325.0" text="sign in" />
       <Button fx:id="buttonSignUp" layoutX="278.0" layoutY="558.0" mnemonicParsing="false" onAction="#signUp" prefHeight="41.0" prefWidth="96.0" text="sign up" />
       <Label layoutX="41.0" layoutY="568.0" prefHeight="21.0" prefWidth="212.0" text="Don't have an account ?" />
       <Separator layoutX="41.0" layoutY="552.0" prefHeight="0.0" prefWidth="325.0" />
