@@ -17,13 +17,13 @@
                 <Label maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" text="What's on your mind ?" VBox.vgrow="NEVER" />
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <TextArea maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" HBox.hgrow="NEVER" />
+                        <TextArea fx:id="textAreaDescription" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" HBox.hgrow="NEVER" />
                     </children>
                 </HBox>
                 <HBox prefHeight="68.0" prefWidth="336.0">
                     <children>
-                        <Button minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Dodaj" />
-                        <Button minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Usuń" />
+                        <Button fx:id="buttonAdd" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Dodaj" />
+                        <Button fx:id="buttonDelete" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Usuń" />
                         <ToggleButton minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Friends" />
                         <ToggleButton minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Groups" />
                     </children>
@@ -35,6 +35,6 @@
         <Label prefHeight="15.0" prefWidth="395.0" text="Aktualizacja 5 min temu" BorderPane.alignment="CENTER" />
     </bottom>
     <center>
-        <ListView prefHeight="200.0" prefWidth="281.0" BorderPane.alignment="CENTER" />
+        <ListView fx:id="listViewUsers" prefHeight="200.0" prefWidth="281.0" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>

@@ -1,6 +1,7 @@
 package app.view;
 
 import app.logic.Main;
+import app.logic.ViewMenager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -8,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import javax.swing.text.View;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,6 +33,8 @@ public class RegisterController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        buttonSignUpReg.getStyleClass().add("bigButton");
+        buttonBack.getStyleClass().add("smallButton");
     }
 
     public void signUp(){
@@ -43,7 +48,7 @@ public class RegisterController implements Initializable {
 
     public void backToLoggIn(){
         Scene scene = textFieldLogin.getScene();
-        scene.setRoot(Main.getLoggInRoot());
+        scene.setRoot(ViewMenager.loggInRoot);
     }
 
 

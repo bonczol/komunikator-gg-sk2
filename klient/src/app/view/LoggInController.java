@@ -1,9 +1,6 @@
 package app.view;
 
-import app.logic.Client;
-import app.logic.LocalUser;
-import app.logic.Main;
-import app.logic.User;
+import app.logic.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,6 +33,8 @@ public class LoggInController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        buttonSignIn.getStyleClass().add("bigButton");
+        buttonSignUp.getStyleClass().add("smallButton");
     }
 
     public void singIn(){
@@ -44,7 +43,14 @@ public class LoggInController implements Initializable {
 
     public void showMenu(){
         Stage stage = (Stage) textFieldLogin.getScene().getWindow();
-        stage.setScene(new Scene(Main.getMenuRoot()));
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
+        try {
+            ViewMenager.menuRoot = menuLoader.load();
+            ViewMenager.menuController = menuLoader.getController();
+            stage.setScene(new Scene(ViewMenager.menuRoot));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         stage.setOnHiding( event -> {Main.getClient().getSender().sendSignOutMessage();} );
     }
 
