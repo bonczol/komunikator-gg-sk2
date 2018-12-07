@@ -29,7 +29,7 @@
                   <TextArea fx:id="textAreaDescription" focusTraversable="false" maxHeight="80.0" maxWidth="1.7976931348623157E308" minHeight="26.0" prefHeight="60.0" prefWidth="400.0" />
                 <HBox prefHeight="42.0" prefWidth="400.0">
                     <children>
-                        <Button fx:id="buttonAdd" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Add" HBox.hgrow="NEVER" />
+                        <Button fx:id="buttonAdd" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" onAction="#showAddFriendWindow" prefWidth="100.0" text="Add" HBox.hgrow="NEVER" />
                         <Button fx:id="buttonDelete" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Delete" HBox.hgrow="NEVER" />
                         <ToggleButton fx:id="buttonFriends" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Friends" HBox.hgrow="NEVER" />
                         <ToggleButton fx:id="buttonGroups" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Groups" HBox.hgrow="NEVER" />

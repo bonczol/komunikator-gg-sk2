@@ -57,6 +57,7 @@ public class Sender{
     private String transformToMessage(String code, ArrayList<String> message){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%s%s", code, this.sep));
+
         for(int i = 0; i  < message.size(); i++){
             stringBuilder.append(message.get(i));
             if(i < message.size() - 1 )
