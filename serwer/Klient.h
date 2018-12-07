@@ -48,7 +48,8 @@ public:
 	}
 
 	friend std::ostream& operator<< (std::ostream& os, const Klient& klient) {
-		os << klient.nick << " : " << klient.login << " : " << klient.password << " : " << klient.description;
+		os << klient.nick << " : " << klient.login << " : " <<
+		 klient.password  << " : " << klient.description << " : " << klient.logged_in;
 		return os;
 	}
 };

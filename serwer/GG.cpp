@@ -21,7 +21,7 @@
 #include "ServerSerializer.h"
 #include <signal.h>
 
-#define SERVER_PORT 1337
+#define SERVER_PORT 1338
 #define QUEUE_SIZE 5
 bool WORK = true;
 
@@ -38,9 +38,9 @@ void *ThreadBehavior1(void *t_data){
 	pthread_detach(pthread_self());
 	int* socket = (int*) t_data;
 	Responder resp(*socket);
-	cout << "iema" <<endl;
 	resp.readAndRespond();
 	close(*socket);
+	cout << "Connection lost on socket " << *socket << endl;
 	pthread_exit(NULL);
 }
 
@@ -63,7 +63,7 @@ void* connection_accepter(void *server_socket){
 	int* server_socket_descriptor = (int*) server_socket;
 	while(1){
 		int connection_socket_descriptor = accept(*server_socket_descriptor, NULL, NULL);
-		printf("elo\n");
+		cout << "New connection on socket " << connection_socket_descriptor << endl;
 		handleConnection(connection_socket_descriptor);
 	}
 }
@@ -128,6 +128,12 @@ int main(int argc, char* argv[])
 			for (auto const& x : Klient::CLIENTS){
 				std::cout << *x.second  << endl; 
 			}
+		}
+		else if(c == 'd'){
+			string login;
+			cout << "login: ";
+			cin >> login;
+			Klient::CLIENTS.erase(login);
 		}
 		sleep(1);
 	}
