@@ -1,0 +1,87 @@
+.root {
+    -fx-background-color: #71A363;
+    -fx-font-family: "Lucida Sans";
+    -fx-focus-color: #E6E8E5;
+    -fx-faint-focus-color: #E6E8E5;
+}
+
+.bigButton{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+    -fx-font-size: 46px;
+}
+
+.bigButton:hover{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0,0,0);
+    -fx-text-fill: #F2F2F2;
+    -fx-underline: true;
+}
+
+.smallButton:hover{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0,0,0);
+    -fx-text-fill: #F2F2F2;
+}
+
+.smallButton{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+    -fx-underline: true;
+}
+
+.text-field{
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-background-color: #32965D;
+    -fx-background-radius: 20px;
+}
+
+.text-field:focused{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0,0,0);
+}
+
+.check-box .box{
+    -fx-background-color: #32965D;
+    -fx-background-radius: 20px;
+}
+.separator *.line{
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: #32965D;
+}
+
+.text-area{
+    -fx-background-insets: 0;
+}
+.text-area .content {
+    -fx-background-color: #FFFFFF ;
+    -fx-padding: 15px;
+
+}
+
+.labelUserName{
+    -fx-background-color: #32965D;
+    -fx-font-size: 20px;
+    -fx-text-fill: #E6E8E5;
+}
+
+.labelDescription{
+    -fx-background-color: #F5F7F4;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #E6E8E5;
+
+}
+
+.menuButton{
+    -fx-background-color: #F5F7F4;
+    -fx-background-radius: 0;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: #E6E8E5;
+}
+
+.menuButton:hover{
+    -fx-background-color: #E6E8E5;
+}
+
+.list-view {
+    -fx-selection-bar: #A5A1A8 ;
+}
