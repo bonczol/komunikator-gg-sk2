@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -9,32 +11,37 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="700.0" maxWidth="400.0" minHeight="550.0" minWidth="320.0" prefHeight="700.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.MenuController">
+<BorderPane maxHeight="700.0" maxWidth="400.0" minHeight="550.0" minWidth="320.0" prefHeight="685.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.MenuController">
     <top>
-        <VBox prefHeight="165.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="181.0" prefWidth="400.0" BorderPane.alignment="CENTER">
             <children>
-            <Label prefHeight="44.0" prefWidth="399.0" text="Januszek" />
-                <Label maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" text="What's on your mind ?" VBox.vgrow="NEVER" />
-                <HBox prefHeight="100.0" prefWidth="200.0">
+            <Label fx:id="labelUserName" prefHeight="50.0" prefWidth="399.0" text="Janol5962">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" top="8.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></Label>
+                <Label fx:id="labelDescription" maxHeight="41.0" maxWidth="1.7976931348623157E308" minHeight="25.0" prefHeight="30.0" prefWidth="400.0" text="What's on your mind ?" VBox.vgrow="NEVER">
+               <padding>
+                  <Insets bottom="5.0" left="15.0" top="8.0" />
+               </padding></Label>
+                  <TextArea fx:id="textAreaDescription" focusTraversable="false" maxHeight="80.0" maxWidth="1.7976931348623157E308" minHeight="26.0" prefHeight="60.0" prefWidth="400.0" />
+                <HBox prefHeight="42.0" prefWidth="400.0">
                     <children>
-                        <TextArea fx:id="textAreaDescription" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" HBox.hgrow="NEVER" />
-                    </children>
-                </HBox>
-                <HBox prefHeight="68.0" prefWidth="336.0">
-                    <children>
-                        <Button fx:id="buttonAdd" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Dodaj" />
-                        <Button fx:id="buttonDelete" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Usuń" />
-                        <ToggleButton minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Friends" />
-                        <ToggleButton minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Groups" />
+                        <Button fx:id="buttonAdd" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Add" HBox.hgrow="NEVER" />
+                        <Button fx:id="buttonDelete" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Delete" HBox.hgrow="NEVER" />
+                        <ToggleButton fx:id="buttonFriends" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Friends" HBox.hgrow="NEVER" />
+                        <ToggleButton fx:id="buttonGroups" focusTraversable="false" minHeight="40.0" mnemonicParsing="false" prefWidth="100.0" text="Groups" HBox.hgrow="NEVER" />
                     </children>
                 </HBox>
             </children>
         </VBox>
     </top>
-    <bottom>
-        <Label prefHeight="15.0" prefWidth="395.0" text="Aktualizacja 5 min temu" BorderPane.alignment="CENTER" />
-    </bottom>
-    <center>
-        <ListView fx:id="listViewUsers" prefHeight="200.0" prefWidth="281.0" BorderPane.alignment="CENTER" />
-    </center>
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+   <left>
+        <ListView fx:id="listViewUsers" prefHeight="528.0" prefWidth="401.0" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>

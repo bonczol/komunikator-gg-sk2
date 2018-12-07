@@ -5,11 +5,10 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane minHeight="400.0" minWidth="550.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.ChatController">
+<AnchorPane minHeight="400.0" minWidth="550.0" prefHeight="439.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.ChatController">
    <children>
-      <TextArea layoutX="19.0" layoutY="260.0" prefHeight="97.0" prefWidth="512.0" />
-      <ListView layoutX="19.0" layoutY="22.0" prefHeight="231.0" prefWidth="512.0" />
-      <Button layoutX="482.0" layoutY="361.0" mnemonicParsing="false" text="Send" />
+      <TextArea layoutX="13.0" layoutY="314.0" prefHeight="105.0" prefWidth="533.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="314.0" />
+      <ListView layoutY="-18.0" prefHeight="313.0" prefWidth="573.0" />
+      <Button layoutX="550.0" layoutY="342.0" maxHeight="25.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="19.0" text="Send" AnchorPane.rightAnchor="4.0" />
    </children>
 </AnchorPane>

@@ -22,7 +22,15 @@ public class MenuController implements Initializable {
     @FXML
     private Button buttonDelete;
     @FXML
+    private ToggleButton buttonFriends;
+    @FXML
+    private ToggleButton buttonGroups;
+    @FXML
     private ListView<User> listViewUsers;
+    @FXML
+    private Label labelUserName;
+    @FXML
+    private Label labelDescription;
 
     private ObservableList<User> observableListUsers;
 
@@ -34,6 +42,13 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        buttonAdd.getStyleClass().add("menuButton");
+        buttonDelete.getStyleClass().add("menuButton");
+        buttonFriends.getStyleClass().add("menuButton");
+        buttonGroups.getStyleClass().add("menuButton");
+        labelDescription.getStyleClass().add("labelDescription");
+        labelUserName.getStyleClass().add("labelUserName");
+
         if(!observableListUsers.isEmpty())
             listViewUsers.setItems(observableListUsers);
         listViewUsers.setCellFactory(observableListUsers -> new UserCellController() );

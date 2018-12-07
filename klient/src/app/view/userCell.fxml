@@ -15,8 +15,14 @@
       </Circle>
       <VBox alignment="CENTER" prefHeight="35.0" prefWidth="233.0">
          <children>
-            <Label fx:id="labelNick" prefHeight="20.0" prefWidth="223.0" text="Tomek" />
-            <Label fx:id="labelDescription" prefHeight="52.0" prefWidth="223.0" text="hej hej kto piwko" />
+            <Label fx:id="labelNick" prefHeight="20.0" prefWidth="223.0" text="kurwa mac jebam">
+               <padding>
+                  <Insets bottom="2.0" left="3.0" right="3.0" top="2.0" />
+               </padding></Label>
+            <Label fx:id="labelDescription" prefHeight="52.0" prefWidth="223.0">
+               <padding>
+                  <Insets bottom="2.0" left="3.0" right="3.0" top="2.0" />
+               </padding></Label>
          </children>
       </VBox>
    </children>

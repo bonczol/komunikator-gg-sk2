@@ -34,6 +34,7 @@ public class UserCellController extends ListCell<User> {
         super.updateItem(user, empty);
 
         if(empty || user == null){
+            setPrefHeight(50);
             setText(null);
             setGraphic(null);
         }else{
@@ -50,9 +51,9 @@ public class UserCellController extends ListCell<User> {
                 circle.setFill(Color.RED);
             setText(null);
             setGraphic(hbox);
-
         }
     }
+
 
 }
 
