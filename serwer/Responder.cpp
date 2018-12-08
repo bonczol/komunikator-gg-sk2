@@ -168,6 +168,7 @@ void Responder::search(string buf){
 			}
 		}
 		if(found) temp = temp.substr(0, temp.length() - 1);
+		else temp += " ";
 		cout << "Udane\n";
 		send_info_code(temp);
 		pthread_mutex_unlock(&Klient::clients_mutex);
