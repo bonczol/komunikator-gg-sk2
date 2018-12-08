@@ -1,6 +1,7 @@
 package app.view;
 
 import app.logic.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -38,33 +39,8 @@ public class LoggInController implements Initializable {
     }
 
     public void singIn(){
-       Main.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+       Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
     }
-
-    public void showMenu(){
-        Stage stage = (Stage) textFieldLogin.getScene().getWindow();
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
-        try {
-            ViewMenager.menuRoot = menuLoader.load();
-            ViewMenager.menuController = menuLoader.getController();
-            stage.setScene(new Scene(ViewMenager.menuRoot));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        stage.setOnHiding( event -> {Main.getClient().getSender().sendSignOutMessage();} );
-    }
-
-    public void accessGranted(String nickname, String description, ArrayList<User> friends) {
-        Main.getClient().user = new LocalUser(nickname, textFieldLogin.getText(), description, true, friends );
-        showMenu();
-    }
-
-    public void accessDenied(){
-        labelInfo.setText("Wrong username or password");
-        textFieldLogin.clear();
-        passwordField.clear();
-    }
-
 
     public void signUp(){
         Scene scene = textFieldLogin.getScene();
@@ -77,6 +53,33 @@ public class LoggInController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void accessGranted(String nickname, String description, ArrayList<User> friends) {
+        Client.getClient().user = new LocalUser(nickname, textFieldLogin.getText(), description, true, friends );
+        Platform.runLater(() -> showMenu());
+    }
+
+    public void accessDenied(){
+        labelInfo.setText("Wrong username or password");
+        textFieldLogin.clear();
+        passwordField.clear();
+    }
+
+    public void showMenu(){
+        Stage stage = (Stage) textFieldLogin.getScene().getWindow();
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
+        try {
+            ViewMenager.menuRoot = menuLoader.load();
+            ViewMenager.menuController = menuLoader.getController();
+            stage.setScene(new Scene(ViewMenager.menuRoot));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        stage.setOnHiding( event -> {Client.getClient().getSender().sendSignOutMessage();} );
+    }
+
+
+
 
 
 }

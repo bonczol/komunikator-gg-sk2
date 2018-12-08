@@ -1,5 +1,6 @@
 package app.view;
 
+import app.logic.Client;
 import app.logic.Main;
 import app.logic.ViewMenager;
 import javafx.fxml.FXML;
@@ -39,7 +40,7 @@ public class RegisterController implements Initializable {
 
     public void signUp(){
         if(textFieldPassword.getText().equals(textFieldRepeatPassword.getText())){
-            Main.getClient().getSender().sendSignUpMessage(textFieldNick.getText(), textFieldLogin.getText(), textFieldPassword.getText());
+            Client.getClient().getSender().sendSignUpMessage(textFieldNick.getText(), textFieldLogin.getText(), textFieldPassword.getText());
             labelInfo.setText("Connecting ...");
         }
         else
