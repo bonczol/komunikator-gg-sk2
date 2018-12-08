@@ -300,7 +300,7 @@ void Responder::check_for_unsent_msgs(){
 	for(auto const& m_k : Message::UNSENT_MSGS_BUFFER) {
 		if(m_k.second->login == this->klient->login && m_k.second->logged_in) {
 			sendMsg(m_k.first, m_k.second);
-			Message::UNSENT_MSGS_BUFFER.erase(m);
+			Message::UNSENT_MSGS_BUFFER.erase(m_k.first);
 		}
 	}
 	pthread_mutex_unlock(&Message::unsent_buffer_mutex);

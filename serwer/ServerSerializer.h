@@ -8,7 +8,7 @@ class ServerSerializer
 private:
 	std::map<int, Conversation*> ALL_CONVS;
 	std::map<std::string, Klient*> CLIENTS;
-	std::map<Klient*, Message*> UNSENT_MSGS;
+	std::map<Message*, Klient*> UNSENT_MSGS;
 
 	friend class boost::serialization::access;
 	template<class Archive>
