@@ -37,8 +37,9 @@ struct thread_data_t
 void *ThreadBehavior1(void *t_data){
 	pthread_detach(pthread_self());
 	int* socket = (int*) t_data;
-	Responder resp(*socket);
-	resp.readAndRespond();
+	Responder *resp = new Responder(*socket);
+	resp->readAndRespond();
+	delete resp;
 	close(*socket);
 	cout << "Connection lost on socket " << *socket << endl;
 	pthread_exit(NULL);
@@ -115,7 +116,7 @@ int main(int argc, char* argv[])
 	pthread_create(&thread, NULL, connection_accepter, &server_socket_descriptor);
 
 	ServerSerializer s;
-	s.deserialize();
+	//s.deserialize();
 	cout << "Entering the loop\nTo stop the server press c+Enter\n";
 	char c;
 	while (WORK)
@@ -133,7 +134,11 @@ int main(int argc, char* argv[])
 			string login;
 			cout << "login: ";
 			cin >> login;
-			Klient::CLIENTS.erase(login);
+			pthread_mutex_lock(&Klient::clients_mutex);
+			std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
+			if (klient_it != Klient::CLIENTS.end())
+				Klient::CLIENTS.erase(login);
+			pthread_mutex_unlock(&Klient::clients_mutex);
 		}
 		sleep(1);
 	}

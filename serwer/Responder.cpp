@@ -54,11 +54,15 @@ void Responder::readAndRespond(){
 		case 109:
 			change_description(bufo);
 			break;
+		case 110:
+			delete_friend(bufo);
+			break;
 		default:
 			break;
 		}
 
 	}
+	if(this -> klient) this->klient->logged_in = false;
 }
 
 
@@ -68,11 +72,14 @@ void Responder::message(string buf){
 	int ID_conv = stoi(data.front()); data.pop_front();
 	string msg = data.front();
 	if ((msg.length() > 0) && this -> klient && this->klient->logged_in) {
-		Message* m = new Message(msg, this->klient);
+		Message* m = new Message(msg, this->klient, ID_conv);
 		Conversation* c = Conversation::ALL_CONVS[ID_conv];
 		c->push_message(m);
 		for (Klient* k : c->getClients()) {
-			if (k->login != this->klient->login) sendMsg(m, k, ID_conv);
+			if (k->login != this->klient->login){
+				if(k->logged_in) sendMsg(m, k);
+				else Message::push_to_unsent_buffer(k, m);
+			} 
 		}
 		cout << "Wyslano\n";
 		send_info_code("400|1");
@@ -102,6 +109,7 @@ void Responder::login(string buf){
 		if(temp.at(temp.length()-1) == ',') temp = temp.substr(0, temp.length() - 1);
 		cout << "Udane\n";
 		send_info_code("401|"+temp);
+		check_for_unsent_msgs();
 		return;
 	}
 	cout << "Nieudane\n";
@@ -110,8 +118,8 @@ void Responder::login(string buf){
 }
 
 void Responder::logout(string buf){
-	cout << "Logout: " << this->klient->login << endl;
 	if (this -> klient && this->klient->logged_in) {
+		cout << "Logout: " << this->klient->login << endl;
 		this->klient->logged_in = false;
 		this->klient->socket = -1;
 		this->klient = NULL;
@@ -147,18 +155,23 @@ void Responder::user_register(string buf){
 }
 
 void Responder::search(string buf){
-	cout << this -> klient->login << " szuka " << buf << endl;
 	if (this->klient && this->klient->logged_in) {
-		string login = buf;
+		cout << this -> klient->login << " szuka " << buf << endl;
+		bool found = false;
+		int n = buf.length();
+		string temp = "404|";
 		pthread_mutex_lock(&Klient::clients_mutex);
-		std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
-		if (klient_it != Klient::CLIENTS.end()) {
-			pthread_mutex_unlock(&Klient::clients_mutex);
-			cout << "Udane\n";
-			send_info_code("404|" + klient_it->second->nick);
-			return;
+		for(auto const& log_k : Klient::CLIENTS) {
+			if(log_k.first.substr(0, n) == buf) {
+				temp += log_k.second->nick + "," + log_k.second->login + "|";
+				found = true;
+			}
 		}
+		if(found) temp = temp.substr(0, temp.length() - 1);
+		cout << "Udane\n";
+		send_info_code(temp);
 		pthread_mutex_unlock(&Klient::clients_mutex);
+		return;
 	}
 	cout << "Nieudane\n";
 	send_info_code("404|0");
@@ -166,17 +179,21 @@ void Responder::search(string buf){
 }
 
 void Responder::addFriend(string buf){
-	cout << this -> klient->login << " dodaje " << buf << endl;
 	string login = buf;
-	if (this->klient && this->klient->logged_in) {
+	bool already_friend = false;
+	if (this->klient && this->klient->logged_in && this->klient->login != buf) {
+		cout << this -> klient->login << " dodaje " << buf << endl;
 		pthread_mutex_lock(&Klient::clients_mutex);
 		std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
-		if (klient_it != Klient::CLIENTS.end()) {
-			cout << klient_it->first << " " << login << endl;
+		for(Klient* f : this->klient->friends){
+			if(f->login == buf) already_friend = true;
+		}
+		if (klient_it != Klient::CLIENTS.end() && !already_friend) {
 			pthread_mutex_unlock(&Klient::clients_mutex);
 			this->klient->friends.push_back(klient_it->second);
 			cout << "Udane\n";
-			send_info_code("405|" + klient_it->second->nick+"|"+klient_it->second->description);
+			send_info_code("405|" + klient_it->second->nick+"|"+klient_it->second->description +
+			 "|" + klient_it->second->str_log());
 			return;
 		}
 		pthread_mutex_unlock(&Klient::clients_mutex);
@@ -187,9 +204,9 @@ void Responder::addFriend(string buf){
 }
 
 void Responder::sendFriends(string buf){
-	cout << this->klient->login << " pobiera znajomych " << endl;
 	string temp = "";
 	if (this->klient && this->klient->logged_in) {
+		cout << this->klient->login << " pobiera znajomych " << endl;
 		for (Klient* k : this->klient->friends) {
 			temp = temp + k->nick + "," + k->login + ","+k->description+","+k->str_log()+"|";
 		}
@@ -237,7 +254,7 @@ void Responder::newConv(string buf) {
 
 void Responder::change_description(string buf){
 	cout << this->klient->login << " zmienia opis na " << buf << endl;
-	if(this -> klient && this -> klient -> logged_in){
+	if(this -> klient && this -> klient -> logged_in && buf != " "){
 		if(buf.length() == 0) buf = " ";
 		this->klient->description = buf;
 		cout << "Udane\n";
@@ -249,14 +266,44 @@ void Responder::change_description(string buf){
 	return;
 }
 
+void Responder::delete_friend(string buf){
+	//string login = buf;
+	pthread_mutex_lock(&this->klient->friends_mutex);
+	for (auto it = this->klient->friends.begin(); it != this->klient->friends.end(); ) {
+        if ((*it)->login == buf) {
+            this->klient->friends.erase(it);
+            pthread_mutex_unlock(&this->klient->friends_mutex);
+            send_info_code("410|1");
+            return;
+        } else {
+            ++it;
+        }
+    }
+    pthread_mutex_unlock(&this->klient->friends_mutex);
+    send_info_code("410|0");
+    return;
+}
 
 
-bool Responder::sendMsg(Message*m, Klient* to, int id_conv) {
-	string to_send = "500|" + m->toString1(id_conv) + "\n";
+
+bool Responder::sendMsg(Message*m, Klient* to) {
+	string to_send = "500|" + m->toString1() + "\n";
 	cout << to_send << endl;
 	const char* msg = to_send.c_str();
 	write(to->socket, msg, to_send.length());
 	return true;
+}
+
+void Responder::check_for_unsent_msgs(){
+	pthread_mutex_lock(&Message::unsent_buffer_mutex);
+	for(auto const& m_k : Message::UNSENT_MSGS_BUFFER) {
+		if(m_k.second->login == this->klient->login && m_k.second->logged_in) {
+			sendMsg(m_k.first, m_k.second);
+			Message::UNSENT_MSGS_BUFFER.erase(m);
+		}
+	}
+	pthread_mutex_unlock(&Message::unsent_buffer_mutex);
+	return;
 }
 
 list<string> Responder::split_string(string text, char sep, bool msg) {
