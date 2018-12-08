@@ -163,7 +163,7 @@ void Responder::search(string buf){
 		pthread_mutex_lock(&Klient::clients_mutex);
 		for(auto const& log_k : Klient::CLIENTS) {
 			if(log_k.first.substr(0, n) == buf) {
-				temp += log_k.second->nick + "," + log_k.second->login + "|";
+				temp += log_k.second->nick + "," + log_k.second->login + ",";
 				found = true;
 			}
 		}
