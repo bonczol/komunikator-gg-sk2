@@ -21,7 +21,7 @@
 #include "ServerSerializer.h"
 #include <signal.h>
 
-#define SERVER_PORT 1337
+#define SERVER_PORT 1338
 #define QUEUE_SIZE 5
 bool WORK = true;
 
@@ -37,10 +37,11 @@ struct thread_data_t
 void *ThreadBehavior1(void *t_data){
 	pthread_detach(pthread_self());
 	int* socket = (int*) t_data;
-	Responder resp(*socket);
-	cout << "iema" <<endl;
-	resp.readAndRespond();
+	Responder *resp = new Responder(*socket);
+	resp->readAndRespond();
+	delete resp;
 	close(*socket);
+	cout << "Connection lost on socket " << *socket << endl;
 	pthread_exit(NULL);
 }
 
@@ -63,7 +64,7 @@ void* connection_accepter(void *server_socket){
 	int* server_socket_descriptor = (int*) server_socket;
 	while(1){
 		int connection_socket_descriptor = accept(*server_socket_descriptor, NULL, NULL);
-		printf("elo\n");
+		cout << "New connection on socket " << connection_socket_descriptor << endl;
 		handleConnection(connection_socket_descriptor);
 	}
 }
@@ -115,7 +116,7 @@ int main(int argc, char* argv[])
 	pthread_create(&thread, NULL, connection_accepter, &server_socket_descriptor);
 
 	ServerSerializer s;
-	s.deserialize();
+	//s.deserialize();
 	cout << "Entering the loop\nTo stop the server press c+Enter\n";
 	char c;
 	while (WORK)
@@ -128,6 +129,16 @@ int main(int argc, char* argv[])
 			for (auto const& x : Klient::CLIENTS){
 				std::cout << *x.second  << endl; 
 			}
+		}
+		else if(c == 'd'){
+			string login;
+			cout << "login: ";
+			cin >> login;
+			pthread_mutex_lock(&Klient::clients_mutex);
+			std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
+			if (klient_it != Klient::CLIENTS.end())
+				Klient::CLIENTS.erase(login);
+			pthread_mutex_unlock(&Klient::clients_mutex);
 		}
 		sleep(1);
 	}

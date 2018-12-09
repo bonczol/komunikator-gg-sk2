@@ -22,6 +22,7 @@ public:
 	std::string description;
 	int socket;
 	std::list<Klient*> friends;
+	pthread_mutex_t friends_mutex = PTHREAD_MUTEX_INITIALIZER;
 	//lista id konwersacji
 	std::list<int> ID_convs;
 
@@ -48,7 +49,8 @@ public:
 	}
 
 	friend std::ostream& operator<< (std::ostream& os, const Klient& klient) {
-		os << klient.nick << " : " << klient.login << " : " << klient.password << " : " << klient.description;
+		os << klient.nick << " : " << klient.login << " : " <<
+		 klient.password  << " : " << klient.description << " : " << klient.logged_in;
 		return os;
 	}
 };

@@ -10,11 +10,10 @@ Klient::Klient(std::string nick, std::string login, std::string password) {
 	this->password = password;
 	this->logged_in = false;
 	this->socket = -1;
-	cout << "dodawanie" << endl;
+	this->description = " ";
 	pthread_mutex_lock(&Klient::clients_mutex);
 	Klient::CLIENTS[login] = this;
 	pthread_mutex_unlock(&Klient::clients_mutex);
-	cout << "dodano" << endl;
 }
 
 
