@@ -193,7 +193,7 @@ void Responder::addFriend(string buf){
 			pthread_mutex_unlock(&Klient::clients_mutex);
 			this->klient->friends.push_back(klient_it->second);
 			cout << "Udane\n";
-			send_info_code("405|" + klient_it->second->nick+"|"+klient_it->second->description +
+			send_info_code("405|" + klient_it->second->nick+"|" +klient_it->second->login+"|"+klient_it->second->description +
 			 "|" + klient_it->second->str_log());
 			return;
 		}
