@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Sender{
     private PrintWriter writer;
     private char sep;
+    private String eof;
 
     public Sender(Socket socket) throws IOException {
         this.writer = new PrintWriter(socket.getOutputStream(), true);
@@ -31,6 +32,7 @@ public class Sender{
     }
 
     public void sendSearchMessage(String login){
+        System.out.println("104" + this.sep + login);
         writer.println("104" + this.sep + login);
     }
 
@@ -46,7 +48,8 @@ public class Sender{
         writer.println("107" + this.sep + convID);
     }
 
-    public void sendNewConvMessage(ArrayList<String> chatMembers){
+    public void sendNewConvMessage(String[] chatMembers){
+        System.out.println(transformToMessage("108", chatMembers));
         writer.println(transformToMessage("108", chatMembers));
     }
 
@@ -54,14 +57,14 @@ public class Sender{
         writer.println("108" + this.sep + description);
     }
 
-    private String transformToMessage(String code, ArrayList<String> message){
+    private String transformToMessage(String code, String[] message){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%s%s", code, this.sep));
 
-        for(int i = 0; i  < message.size(); i++){
-            stringBuilder.append(message.get(i));
-            if(i < message.size() - 1 )
-                stringBuilder.append(this.sep);
+        for(int i = 0; i  < message.length; i++){
+            stringBuilder.append(message[i]);
+            if(i < message.length - 1 )
+                stringBuilder.append(",");
         }
         return stringBuilder.toString();
     }

@@ -56,7 +56,7 @@ public class LoggInController implements Initializable {
 
     public void accessGranted(String nickname, String description, ArrayList<User> friends) {
         Client.getClient().user = new LocalUser(nickname, textFieldLogin.getText(), description, true, friends );
-        Platform.runLater(() -> showMenu());
+        Platform.runLater(() -> showMenuWindow());
     }
 
     public void accessDenied(){
@@ -65,7 +65,7 @@ public class LoggInController implements Initializable {
         passwordField.clear();
     }
 
-    public void showMenu(){
+    public void showMenuWindow(){
         Stage stage = (Stage) textFieldLogin.getScene().getWindow();
         FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
         try {

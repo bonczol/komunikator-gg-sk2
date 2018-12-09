@@ -24,11 +24,6 @@ public class UserCellController extends ListCell<User> {
 
     private FXMLLoader fxmlLoader;
 
-    public UserCellController(){
-        fxmlLoader = new FXMLLoader(getClass().getResource("userCell.fxml"));
-        fxmlLoader.setController(this);
-    }
-
     @Override
     protected void updateItem(User user, boolean empty){
         super.updateItem(user, empty);
@@ -38,11 +33,16 @@ public class UserCellController extends ListCell<User> {
             setText(null);
             setGraphic(null);
         }else{
-            try {
-                fxmlLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(fxmlLoader == null){
+                fxmlLoader = new FXMLLoader(getClass().getResource("userCell.fxml"));
+                fxmlLoader.setController(this);
+                try {
+                    fxmlLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
             labelNick.setText(user.getNickname());
             labelDescription.setText(user.getDescription());
             if(user.isOnline())
