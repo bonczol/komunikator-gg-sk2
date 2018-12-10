@@ -116,7 +116,10 @@ int main(int argc, char* argv[])
 	pthread_create(&thread, NULL, connection_accepter, &server_socket_descriptor);
 
 	ServerSerializer s;
-	//s.deserialize();
+	std::ifstream pFile("serializedServer.txt", std::ifstream::in);
+	bool empty = pFile.peek() == ifstream::traits_type::eof();
+	cout << empty << endl;
+	if(!empty) s.deserialize();
 	cout << "Entering the loop\nTo stop the server press c+Enter\n";
 	char c;
 	while (WORK)

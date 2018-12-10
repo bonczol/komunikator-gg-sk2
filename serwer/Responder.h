@@ -24,7 +24,8 @@ private:
 	void newConv(string buf);
 	void change_description(string buf);
 	void delete_friend(string buf);
-	
+	void send_conv_id(string buf);
+
 	bool check_registration_validity(string nick, string login, string password);
 	void send_info_code(string code);
 	bool sendMsg(Message* m, Klient* odbiorca);

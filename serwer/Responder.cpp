@@ -57,6 +57,9 @@ void Responder::readAndRespond(){
 		case 110:
 			delete_friend(bufo);
 			break;
+		case 111:
+			send_conv_id(bufo);
+			break;
 		default:
 			break;
 		}
@@ -170,7 +173,6 @@ void Responder::search(string buf){
 		}
 		if(found) temp = temp.substr(0, temp.length() - 1);
 		else temp += " ";
-		cout << temp <<"XXX"<<endl;
 		cout << "Udane\n";
 		send_info_code(temp);
 		pthread_mutex_unlock(&Klient::clients_mutex);
@@ -288,6 +290,20 @@ void Responder::delete_friend(string buf){
 }
 
 
+void Responder::send_conv_id(string buf){
+	//string login = buf
+	for(int id_conv : this->klient->ID_convs){
+		Conversation* c = Conversation::ALL_CONVS[id_conv];
+		for(Klient* k : c->getClients()){
+			if(k->login == buf){
+				send_info_code("411|"+to_string(id_conv));
+				return;
+			}
+		}
+	}
+	send_info_code("411|0");
+	return;
+}
 
 bool Responder::sendMsg(Message*m, Klient* to) {
 	string to_send = "500|" + m->toString1() + "\n";

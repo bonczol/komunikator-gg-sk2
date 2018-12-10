@@ -9,6 +9,7 @@
 108 - nowa konwersacja
 109 - zmiana opisu
 110 - usuwanie ze znajomych
+111 - id konwesracji z uzytkownikiem o loginie login
 
 500 - wiadomosc od uzytkownika o loginie login
 
@@ -23,5 +24,6 @@
 108|login1|login2|login3...					response: 408|0 lub 408|ID_conv
 109|description								response: 409|0 lub 409|1
 110|login 									response: 410|0 lub 410|1
+111|login 									response: 411|0 lub 411|id_conv
 
 500|login|ID_conv|data|godzina|wiadomosc
