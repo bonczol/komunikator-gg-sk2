@@ -1,2 +1,2 @@
-22 serialization::archive 15 0 0 0 0 0 0 0 0 1 0 0 0 3 abc 4 1 0
-0 3 abc 3 abc 3 abc 1   0 0 0 0 0 0 0 0 0 0
+22 serialization::archive 15 0 0 0 0 0 0 0 0 1 0 0 0 5 login 4 1 0
+0 4 nick 5 login 5 haslo 1   0 0 0 0 0 0 0 0 0 0

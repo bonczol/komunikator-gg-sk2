@@ -21,7 +21,7 @@
 #include "ServerSerializer.h"
 #include <signal.h>
 
-#define SERVER_PORT 1338
+#define SERVER_PORT 1337
 #define QUEUE_SIZE 5
 bool WORK = true;
 

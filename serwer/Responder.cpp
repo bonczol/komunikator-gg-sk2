@@ -161,7 +161,8 @@ void Responder::search(string buf){
 		int n = buf.length();
 		string temp = "404|";
 		pthread_mutex_lock(&Klient::clients_mutex);
-		for(auto const& log_k : Klient::CLIENTS) {
+		for(auto const& log_k : Klient::CLIENTS) {\
+			cout << buf << " " << log_k.first << " " << log_k.first.substr(0, n) << endl;
 			if(log_k.first.substr(0, n) == buf) {
 				temp += log_k.second->nick + "," + log_k.second->login + ",";
 				found = true;
@@ -169,6 +170,7 @@ void Responder::search(string buf){
 		}
 		if(found) temp = temp.substr(0, temp.length() - 1);
 		else temp += " ";
+		cout << temp <<"XXX"<<endl;
 		cout << "Udane\n";
 		send_info_code(temp);
 		pthread_mutex_unlock(&Klient::clients_mutex);
