@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #71A363;
+    -fx-background-color: #EAF7E6;
     -fx-font-family: "Lucida Sans";
     -fx-focus-color: #E6E8E5;
     -fx-faint-focus-color: #E6E8E5;
@@ -12,20 +12,18 @@
 }
 
 .bigButton:hover{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0,0,0);
-    -fx-text-fill: #F2F2F2;
+    -fx-text-fill: #A5A1A8;
     -fx-underline: true;
 }
 
 .smallButton:hover{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0,0,0);
-    -fx-text-fill: #F2F2F2;
+    -fx-text-fill: #A5A1A8;
+    -fx-underline: true;
 }
 
 .smallButton{
     -fx-background-color: transparent;
     -fx-background-radius: 20px;
-    -fx-underline: true;
 }
 
 .text-field{
@@ -35,8 +33,12 @@
     -fx-background-radius: 20px;
 }
 
+.text-field{
+    -fx-prompt-text-fill: #40C479;
+}
+
 .text-field:focused{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0,0,0);
+    -fx-effect: dropshadow(three-pass-box, #21854A, 1, 1,1,1);
 }
 
 .check-box .box{
@@ -68,7 +70,6 @@
     -fx-background-color: #F5F7F4;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #E6E8E5;
-
 }
 
 .menuButton{
@@ -82,6 +83,35 @@
     -fx-background-color: #E6E8E5;
 }
 
-.list-view {
-    -fx-selection-bar: #A5A1A8 ;
+
+.smallTextFiel{
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
 }
+.list-cell:odd { /* <=== changed to even */
+    -fx-background-color: #EAF7E6;
+}
+
+.list-cell:even { /* <=== changed to even */
+    -fx-background-color: #F5F7F4;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #A5A1A8;
+    -fx-text-fill: white;
+}
+
+.searchListView {
+    -fx-selection-bar: #A5A1A8 ;
+    -fx-background-color: #F5F7F4;;
+}
+
+#buttonSend{
+    -fx-background-radius: 5em;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-min-height: 20px;
+    -fx-min-width: 20px;
+}
+
+

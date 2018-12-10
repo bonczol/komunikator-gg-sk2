@@ -39,7 +39,7 @@ public class Client {
         if(client == null){
             synchronized (Client.class){
                 if(client == null)
-                    client = new Client("192.168.0.19", 1338);
+                    client = new Client("192.168.0.20", 1338);
             }
         }
 

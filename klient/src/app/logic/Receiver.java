@@ -1,5 +1,7 @@
 package app.logic;
 
+import javax.swing.text.View;
+import javax.swing.text.html.ListView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,6 +28,7 @@ public class Receiver implements Runnable{
         while(running){
             try {
                 message = reader.readLine();
+                System.out.println(message);
                 sMessage = message.split(Pattern.quote("|"));
 
                 switch (Integer.valueOf(sMessage[0])) {
@@ -54,10 +57,7 @@ public class Receiver implements Runnable{
                             searchForUser(sMessage);
                         break;
                     case 405:
-                        if(sMessage[1].equals("0"))
-                            System.out.println("x");
-                        else
-                            System.out.println("x");
+                            addFriend(sMessage);
                         break;
                     case 406:
                         if(sMessage[1].equals("0"))
@@ -66,10 +66,7 @@ public class Receiver implements Runnable{
                             System.out.println("x");
                         break;
                     case 408:
-                        if(sMessage[1].equals("0"))
-                            System.out.println("x");
-                        else
-                            System.out.println("x");
+                        newConversation(sMessage);
                         break;
                     case 500:
                         if(sMessage[1].equals("0"))
@@ -103,13 +100,37 @@ public class Receiver implements Runnable{
     }
 
     private void searchForUser(String[] sMessage){
-        if(sMessage[1].equals("0")){
-            System.out.println("Fail: User not found");
+        switch (sMessage[1]) {
+            case "0":
+                System.out.println("Fail: User not logged in");
+                break;
+            case " ":
+                System.out.println("Fail: User not found");
+                break;
+            default:
+                ViewMenager.addFriendController.showSearchResults(sMessage[1].split(","));
+                System.out.println("Success: User " + sMessage[1] + " found!");
+                break;
         }
+    }
+
+    private void addFriend(String[] sMessage){
+        if(sMessage[1].equals("0"))
+            System.out.println("Fail: User not added");
         else{
-            ViewMenager.addFriendController.showSearchResults(sMessage[1].split(","));
-            System.out.println("Success: User " + sMessage[1] + " found!");
+            Client.getClient().getUser().addFriend(new User(sMessage[1], sMessage[2], sMessage[3], sMessage[4].equals("1")));
+            ViewMenager.menuController.refreshFriendsList();
         }
+    }
+
+    private void newConversation(String[] sMessage){
+        if(sMessage[1].equals("0"))
+            System.out.println("Fail: can't create new conversation");
+        else{
+            System.out.println("xd");
+            //Client.getClient().getUser().addConversation(new Conversation(sMessage[1]));
+        }
+
     }
 
     private void stop(){

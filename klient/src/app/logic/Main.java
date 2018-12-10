@@ -22,6 +22,7 @@ public class Main extends Application {
         primaryStage.show();
     }
     public static void main(String[] args) {
+        System.setProperty("line.separator", "\n"); // Unix line separator
         launch(args);
     }
 
