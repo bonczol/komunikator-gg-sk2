@@ -60,9 +60,11 @@ public class LoggInController implements Initializable {
     }
 
     public void accessDenied(){
-        labelInfo.setText("Wrong username or password");
-        textFieldLogin.clear();
-        passwordField.clear();
+        Platform.runLater(() ->{
+            labelInfo.setText("Wrong username or password");
+            textFieldLogin.clear();
+            passwordField.clear();
+        });
     }
 
     public void showMenuWindow(){

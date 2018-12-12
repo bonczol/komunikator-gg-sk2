@@ -17,6 +17,6 @@
       <CheckBox layoutX="88.0" layoutY="279.0" mnemonicParsing="false" text="Auto logg in" />
       <Label layoutX="41.0" layoutY="568.0" prefHeight="21.0" prefWidth="212.0" text="Don't have an account ?" />
       <Separator layoutX="41.0" layoutY="552.0" prefHeight="0.0" prefWidth="325.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="55.0" layoutY="334.0" prefHeight="19.0" prefWidth="297.0" />
+      <Label fx:id="labelInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="52.0" layoutY="315.0" prefHeight="19.0" prefWidth="297.0" styleClass="infoLabel" />
    </children>
 </AnchorPane>

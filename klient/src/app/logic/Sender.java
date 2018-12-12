@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Sender{
     private PrintWriter writer;
     private char sep;
-    private String eof;
 
     public Sender(Socket socket) throws IOException {
         this.writer = new PrintWriter(socket.getOutputStream(), true);
@@ -54,7 +53,7 @@ public class Sender{
     }
 
     public void sendChangeDescMessage(String description){
-        writer.println("108" + this.sep + description);
+        writer.println("109" + this.sep + description);
     }
 
     private String transformToMessage(String code, String[] message){

@@ -4,8 +4,8 @@ package app.logic;
 public class User {
     protected String nickname;
     protected String login;
-    protected String description;
     protected boolean online;
+    protected String description;
 
     public User(String nickname, String login, String description, boolean online) {
         this.nickname = nickname;
@@ -30,5 +30,7 @@ public class User {
         return online;
     }
 
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

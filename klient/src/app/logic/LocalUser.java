@@ -17,6 +17,7 @@ public class LocalUser extends User {
     }
 
     public void addConversation(Conversation conversation){
+        Client.getClient().getSender().sendGetHistoryMessage(conversation.getId());
         conversations.add(conversation);
     }
 
@@ -31,6 +32,36 @@ public class LocalUser extends User {
     public void setFriends(ArrayList<User> friends) {
         this.friends = friends;
     }
+
+    public User getFriendByLogin(String login) {
+        for (User u : this.friends) {
+            if (login.equals(u.login)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<User> getAllFriendsByLogin(String[] logins){
+        ArrayList<User> friends = new ArrayList<>();
+        for(String l : logins){
+            for(User u : this.friends){
+                if(l.equals(u.login)){
+                    friends.add(u);
+                }
+            }
+        }
+        return friends;
+    }
+
+    public Conversation getConversationById(String id_conv){
+        for (Conversation c: conversations){
+            if(c.getId().equals(id_conv))
+                return c;
+        }
+        return null;
+    }
+
 
 
 }

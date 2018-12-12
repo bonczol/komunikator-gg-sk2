@@ -54,10 +54,20 @@
 .text-area{
     -fx-background-insets: 0;
 }
+
+.text-area .scroll-pane{
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+}
+
 .text-area .content {
     -fx-background-color: #FFFFFF ;
     -fx-padding: 15px;
 
+}
+
+.infoLabel{
+    -fx-text-fill: red;
 }
 
 .labelUserName{

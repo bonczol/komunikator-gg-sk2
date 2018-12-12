@@ -1,14 +1,12 @@
 package app.view;
 
-import app.logic.Client;
-import app.logic.Main;
-import app.logic.User;
-import app.logic.ViewMenager;
+import app.logic.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,13 +14,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class MenuController implements Initializable {
@@ -51,7 +50,6 @@ public class MenuController implements Initializable {
         observableListUsers.addAll(Client.getClient().getUser().getFriends());
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buttonAdd.getStyleClass().add("menuButton");
@@ -60,6 +58,20 @@ public class MenuController implements Initializable {
         buttonGroups.getStyleClass().add("menuButton");
         labelDescription.getStyleClass().add("labelDescription");
         labelUserName.getStyleClass().add("labelUserName");
+
+        // Change description when ENTER pressed
+        textAreaDescription.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                String description = textAreaDescription.getText();
+                Client.getClient().getUser().setDescription(description);
+                Client.getClient().getSender().sendChangeDescMessage(description);
+                Platform.runLater(() -> textAreaDescription.getParent().requestFocus());
+            }
+        });
+
+        // Set local user nick and description
+        labelUserName.setText(Client.getClient().getUser().getNickname());
+        labelDescription.setText(Client.getClient().getUser().getDescription());
 
         listViewUsers.setItems(observableListUsers);
         listViewUsers.setCellFactory(observableListUsers -> new UserCellController() );
@@ -93,10 +105,10 @@ public class MenuController implements Initializable {
             if (click.getClickCount() == 2){
                 Client.getClient().getSender().sendNewConvMessage(new String[]{Client.getClient().user.getLogin(),
                         listViewUsers.getSelectionModel().getSelectedItem().getLogin()});
+
                 showChatWindow();
             }
-
-            });
+        });
     }
 
     private void showChatWindow() {

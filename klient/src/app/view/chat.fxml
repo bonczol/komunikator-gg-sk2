@@ -6,11 +6,11 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="261.0" minWidth="420.0" prefHeight="261.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.ChatController">
+<AnchorPane minHeight="261.0" minWidth="420.0" prefHeight="273.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.ChatController">
    <children>
       <ListView fx:id="listViewConversation" layoutX="14.0" layoutY="14.0" prefHeight="153.0" prefWidth="394.0" />
-      <Button fx:id="buttonSend" layoutX="386.0" layoutY="205.0" maxHeight="25.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="Send" AnchorPane.rightAnchor="14.0" />
-      <TextArea fx:id="textAreaMessage" layoutX="14.0" layoutY="175.0" prefHeight="79.0" prefWidth="372.0" promptText="Type your message ..." AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="175.0" />
+      <Button fx:id="buttonSend" layoutX="386.0" layoutY="205.0" maxHeight="25.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" prefWidth="28.0" text="Send" AnchorPane.rightAnchor="14.0" />
+      <TextArea fx:id="textAreaMessage" layoutX="14.0" layoutY="175.0" prefHeight="79.0" prefWidth="362.0" promptText="Type your message ..." AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="175.0" />
    </children>
    <stylesheets>
       <URL value="@style.css" />
