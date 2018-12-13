@@ -312,7 +312,8 @@ void Responder::tell_his_friends(){
 	string info = "501|"+this->klient->login+"|"+this->klient->description+"|"+this->klient->str_log()+"\n";
 	const char* msg = info.c_str();
 	for(Klient* k : this->klient->friends){
-		write(k -> socket, msg, info.length());
+		if(k->logged_in)
+			write(k -> socket, msg, info.length());
 	}
 }
 
