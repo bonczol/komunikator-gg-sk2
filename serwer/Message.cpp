@@ -10,8 +10,9 @@ Message::Message(string msg, Klient* sender, int id_conv){
 	this->sender = sender;
 	time_t now = std::time(0);
 	tm *ltm = localtime(&now);
-	this->date = to_string(ltm->tm_mday) + to_string(ltm->tm_mon) + to_string(ltm->tm_year);
-	this->time = to_string(ltm->tm_hour) + to_string(ltm->tm_min);
+	this->date = this->padTo(to_string(ltm->tm_mday)) + "." + this->padTo(to_string(1 + ltm->tm_mon)) +
+	 "." + to_string(1900 + ltm->tm_year);
+	this->time = this->padTo(to_string(ltm->tm_hour)) + "." + this->padTo(to_string(ltm->tm_min));
 	this->id_conv = id_conv;
 }
 
@@ -30,4 +31,12 @@ string Message::toString1() {
 
 string Message::toString2() {
 	return this->sender->login + "," + date + "," + time + "," + msg;
+}
+
+
+string Message::padTo(string str, const size_t num, const char paddingChar)
+{
+    if(num > str.size())
+        str.insert(0, num - str.size(), paddingChar);
+    return str;
 }

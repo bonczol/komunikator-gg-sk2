@@ -81,7 +81,7 @@ void Responder::message(string buf){
 		for (Klient* k : c->getClients()) {
 			if (k->login != this->klient->login){
 				if(k->logged_in) sendMsg(m, k);
-				else Message::push_to_unsent_buffer(k, m);
+				//else Message::push_to_unsent_buffer(k, m);
 			} 
 		}
 		cout << "Wyslano\n";
@@ -112,7 +112,10 @@ void Responder::login(string buf){
 		if(temp.at(temp.length()-1) == ',') temp = temp.substr(0, temp.length() - 1);
 		cout << "Udane\n";
 		send_info_code("401|"+temp);
-		check_for_unsent_msgs();
+		//check_for_unsent_msgs();
+		for(int id_conv : this->klient->ID_convs){
+			sendHistory(to_string(id_conv));
+		}
 		tell_his_friends();
 		return;
 	}
@@ -124,12 +127,12 @@ void Responder::login(string buf){
 void Responder::logout(string buf){
 	if (this -> klient && this->klient->logged_in) {
 		cout << "Logout: " << this->klient->login << endl;
+		tell_his_friends();
+		send_info_code("402|1");
 		this->klient->logged_in = false;
 		this->klient->socket = -1;
 		this->klient = NULL;
-		tell_his_friends();
 		cout << "Udane\n";
-		send_info_code("402|1");
 		return;
 	}
 	else {
@@ -233,14 +236,19 @@ void Responder::sendHistory(string buf) {
 	int id_conv = stoi(buf);
 	map<int, Conversation*>::iterator conv_it = Conversation::ALL_CONVS.find(id_conv);
 	if (conv_it != Conversation::ALL_CONVS.end()) {
-		string buf = "407";
 		Conversation* c = conv_it->second;
+		string code = "407|" + buf+"|";
+		for(Klient* k : c->getClients())
+			code += k->login + ",";
+		code = code.substr(0, code.length() - 1);
+		bool empty_conv = true;
 		for (Message* m : c->getMessages()) {
-			buf = buf + "|" + m->toString2();
+			code = code + "|" + m->toString2();
+			empty_conv = false;
 		}	
-		if(buf == "407") buf = buf + "|";
+		if(empty_conv) code = code + "| ";
 		cout << "Udane\n";
-		send_info_code(buf);
+		send_info_code(code);
 		return;
 	}
 	cout << "Nieudane\n";
@@ -250,13 +258,23 @@ void Responder::sendHistory(string buf) {
 
 void Responder::newConv(string buf) {
 	cout << this->klient->login << " tworzy konwersacje" << endl;
-	list<string> logins = split_string(buf, '|');
+	cout << "buf" << buf << endl;
+	list<string> logins = split_string(buf, ',');
 	list<Klient*> clients;
+	string temp="";
+	for(string log : logins){
+		temp+=log+",";
+	}
+	temp = temp.substr(0, temp.length() - 1);
 	for (string login : logins)
 		clients.push_back(Klient::CLIENTS[login]);
 	Conversation* c = new Conversation(clients);
 	cout << "Udane\n";
-	send_info_code("408|" + to_string(c->getID()));
+	int id_conv = c->getID();
+	send_info_code("408|" + to_string(id_conv)+"|" + temp);
+	for(Klient* k : clients)
+		k->ID_convs.push_front(id_conv);
+	return;
 }
 
 void Responder::change_description(string buf){
