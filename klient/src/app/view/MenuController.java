@@ -52,13 +52,6 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        buttonAdd.getStyleClass().add("menuButton");
-        buttonDelete.getStyleClass().add("menuButton");
-        buttonFriends.getStyleClass().add("menuButton");
-        buttonGroups.getStyleClass().add("menuButton");
-        labelDescription.getStyleClass().add("labelDescription");
-        labelUserName.getStyleClass().add("labelUserName");
-
         // Change description when ENTER pressed
         textAreaDescription.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -92,6 +85,15 @@ public class MenuController implements Initializable {
         }
     }
 
+    public void deleteFriend(){
+        User user = listViewUsers.getSelectionModel().getSelectedItem();
+        if(user != null){
+            Client.getClient().getSender().sendDeleteFriendMessage(user.getLogin());
+            Client.getClient().getUser().getFriends().remove(user);
+        }
+
+    }
+
     public void refreshFriendsList(){
         Platform.runLater(()->{
             ObservableList<User> tmp_obsv = FXCollections.observableArrayList(Client.getClient().getUser().getFriends());
@@ -102,19 +104,21 @@ public class MenuController implements Initializable {
 
     private void createNewConversationListener(){
         listViewUsers.setOnMouseClicked(click -> {
-            if (click.getClickCount() == 2){
+            if (click.getClickCount() == 2)
                 Client.getClient().getSender().sendNewConvMessage(new String[]{Client.getClient().user.getLogin(),
                         listViewUsers.getSelectionModel().getSelectedItem().getLogin()});
-
-                showChatWindow();
-            }
         });
     }
 
-    private void showChatWindow() {
+    public void showChatWindow(Conversation conversation) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chat.fxml"));
         try {
             Parent root = loader.load();
+
+            ChatController chatController = loader.getController();
+            chatController.setConversation(conversation);
+            ViewMenager.chatControllers.add(chatController);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();

@@ -13,9 +13,9 @@
         <TextField fx:id="textFieldLogin" alignment="CENTER" layoutX="52.0" layoutY="197.0" prefHeight="54.0" prefWidth="297.0" promptText="LOGIN" />
         <PasswordField fx:id="textFieldPassword" alignment="CENTER" layoutX="52.0" layoutY="271.0" prefHeight="54.0" prefWidth="297.0" promptText="PASSWORD" />
         <PasswordField fx:id="textFieldRepeatPassword" alignment="CENTER" layoutX="52.0" layoutY="343.0" prefHeight="54.0" prefWidth="297.0" promptText="REPEAT PASSSWORD" />
-        <Button fx:id="buttonSignUpReg" layoutX="53.0" layoutY="475.0" mnemonicParsing="false" onAction="#signUp" prefHeight="41.0" prefWidth="304.0" text="sign up" />
+        <Button fx:id="buttonSignUpReg" layoutX="53.0" layoutY="475.0" mnemonicParsing="false" onAction="#signUp" prefHeight="41.0" prefWidth="304.0" styleClass="bigButton" text="sign up" />
         <Label fx:id="labelInfo" contentDisplay="CENTER" layoutX="56.0" layoutY="430.0" prefHeight="29.0" prefWidth="297.0" />
-        <Button fx:id="buttonBack" layoutY="572.0" mnemonicParsing="false" onAction="#backToLoggIn" text="&lt;&lt; back" />
+        <Button fx:id="buttonBack" layoutY="572.0" mnemonicParsing="false" onAction="#backToLoggIn" styleClass="smallButton" text="&lt;&lt; back" />
     </children>
     <stylesheets>
         <URL value="@style.css" />

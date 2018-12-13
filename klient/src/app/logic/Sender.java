@@ -56,6 +56,10 @@ public class Sender{
         writer.println("109" + this.sep + description);
     }
 
+    public void sendDeleteFriendMessage(String login){
+        writer.println("110" + this.sep + login);
+    }
+
     private String transformToMessage(String code, String[] message){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%s%s", code, this.sep));

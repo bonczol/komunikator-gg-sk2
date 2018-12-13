@@ -2,6 +2,7 @@ package app.logic;
 
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -14,10 +15,9 @@ public class Client {
     public LocalUser user;
 
 
-    private Client(String ipAddress, int port) {
+    private Client() {
         try {
-
-            this.clientSocket = new Socket(ipAddress, port);
+            this.clientSocket = new Socket();
             this.sender = new Sender(this.clientSocket);
             this.receiver = new Receiver(this.clientSocket);
             Thread thread = new Thread(receiver);
@@ -25,24 +25,20 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<User> list = new ArrayList<>();
+        this.user = null;
+    }
 
-
-        this.user = new LocalUser("Pudzian", "Mariusz", "ale dzisiaj dojebalem", true, null);
-        list.add(this.user);
-        list.add(new User("Tomasz", "Lis", "kupie opla corse 1998", true));
-        list.add(new User("Januszek", "Kot", "pomocy bija", true));
-        this.user.setFriends(list);
+    public void connectToServer(String  serverIP, int port) throws IOException {
+        clientSocket.connect(new InetSocketAddress(serverIP, port), 5000);
     }
 
     public static synchronized Client getClient() {
         if(client == null){
             synchronized (Client.class){
                 if(client == null)
-                    client = new Client("192.168.0.20", 1338);
+                    client = new Client();
             }
         }
-
         return client;
     }
 

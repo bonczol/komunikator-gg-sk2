@@ -1,6 +1,8 @@
 package app.logic;
 
 
+import app.view.ChatController;
+
 import java.util.ArrayList;
 
 public class LocalUser extends User {
@@ -12,13 +14,34 @@ public class LocalUser extends User {
         this.friends = friends;
     }
 
-    public void addFriend(User friend){
-        friends.add(friend);
-    }
-
     public void addConversation(Conversation conversation){
         Client.getClient().getSender().sendGetHistoryMessage(conversation.getId());
         conversations.add(conversation);
+        ViewMenager.menuController.showChatWindow(conversation);
+    }
+
+    public ArrayList<User> getAllFriendsByLogin(String[] logins){
+        ArrayList<User> friends = new ArrayList<>();
+        for(String l : logins){
+            for(User u : this.friends){
+                if(l.equals(u.login)){
+                    friends.add(u);
+                }
+            }
+        }
+        return friends;
+    }
+
+    public Conversation getConversationById(String id_conv){
+        for (Conversation c: conversations){
+            if(c.getId().equals(id_conv))
+                return c;
+        }
+        return null;
+    }
+
+    public void addFriend(User friend){
+        friends.add(friend);
     }
 
     public ArrayList<Conversation> getConversations() {
@@ -42,25 +65,7 @@ public class LocalUser extends User {
         return null;
     }
 
-    public ArrayList<User> getAllFriendsByLogin(String[] logins){
-        ArrayList<User> friends = new ArrayList<>();
-        for(String l : logins){
-            for(User u : this.friends){
-                if(l.equals(u.login)){
-                    friends.add(u);
-                }
-            }
-        }
-        return friends;
-    }
 
-    public Conversation getConversationById(String id_conv){
-        for (Conversation c: conversations){
-            if(c.getId().equals(id_conv))
-                return c;
-        }
-        return null;
-    }
 
 
 

@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #EAF7E6;
+    -fx-background-color: #F4F4E8;
     -fx-font-family: "Lucida Sans";
     -fx-focus-color: #E6E8E5;
     -fx-faint-focus-color: #E6E8E5;
@@ -29,12 +29,9 @@
 .text-field{
     -fx-font-weight: bold;
     -fx-font-size: 20px;
+    -fx-prompt-text-fill: #40C479;
     -fx-background-color: #32965D;
     -fx-background-radius: 20px;
-}
-
-.text-field{
-    -fx-prompt-text-fill: #40C479;
 }
 
 .text-field:focused{
@@ -63,7 +60,6 @@
 .text-area .content {
     -fx-background-color: #FFFFFF ;
     -fx-padding: 15px;
-
 }
 
 .infoLabel{
@@ -93,11 +89,11 @@
     -fx-background-color: #E6E8E5;
 }
 
-
-.smallTextFiel{
+.smallTextField{
     -fx-font-size: 14px;
     -fx-font-weight: normal;
 }
+
 .list-cell:odd { /* <=== changed to even */
     -fx-background-color: #EAF7E6;
 }

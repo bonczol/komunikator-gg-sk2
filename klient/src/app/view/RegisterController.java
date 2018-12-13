@@ -15,7 +15,7 @@ import javax.swing.text.View;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RegisterController implements Initializable {
+public class RegisterController {
     @FXML
     private TextField textFieldNick;
     @FXML
@@ -31,12 +31,6 @@ public class RegisterController implements Initializable {
     @FXML
     private Button buttonBack;
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        buttonSignUpReg.getStyleClass().add("bigButton");
-        buttonBack.getStyleClass().add("smallButton");
-    }
 
     public void signUp(){
         if(textFieldPassword.getText().equals(textFieldRepeatPassword.getText())){

@@ -13,7 +13,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -61,7 +60,7 @@ public class ChatController implements Initializable {
                 if (empty || message == null) {
                     setText(null);
                 } else {
-                    setText(message.getTime() + " " + message.getAuthor() + ": " +  message.getText());
+                    setText(message.getTime() + " " + message.getAuthor() + ": " + message.getText());
                 }
             }
         });

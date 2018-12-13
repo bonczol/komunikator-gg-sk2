@@ -18,8 +18,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
-public class LoggInController implements Initializable {
+public class LogInController {
     @FXML
     private TextField textFieldLogin;
     @FXML
@@ -31,15 +32,23 @@ public class LoggInController implements Initializable {
     @FXML
     private Label labelInfo;
 
+    private boolean connecting = false;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        buttonSignIn.getStyleClass().add("bigButton");
-        buttonSignUp.getStyleClass().add("smallButton");
-    }
 
     public void singIn(){
-       Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+        new Thread(() -> {
+            Platform.runLater(()->{
+                setInfoText("Connecting");
+            });
+            try {
+                Client.getClient().connectToServer("192.168.0.20", 1338);
+                Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+            } catch (IOException e) {
+                Platform.runLater(()->{
+                    setInfoText("Can't reach server");
+                });
+            }
+        }).start();
     }
 
     public void signUp(){
@@ -80,8 +89,33 @@ public class LoggInController implements Initializable {
         stage.setOnHiding( event -> {Client.getClient().getSender().sendSignOutMessage();} );
     }
 
+    public void setInfoText(String text){
+        labelInfo.setText(text);
+    }
 
 
 
+    public void connectAnimation(){
+        connecting = true;
+        Platform.runLater(()->{
+            while (connecting){
+                try {
+                    setInfoText("Connecting ");
+                    TimeUnit.MILLISECONDS.sleep(400);
+                    setInfoText("Connecting. ");
+                    TimeUnit.MILLISECONDS.sleep(400);
+                    setInfoText("Connecting.. ");
+                    TimeUnit.MILLISECONDS.sleep(400);
+                    setInfoText("Connecting... ");
+                    TimeUnit.MILLISECONDS.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
+    public void stopConnectAnimation(){
+        connecting = false;
+    }
 }
