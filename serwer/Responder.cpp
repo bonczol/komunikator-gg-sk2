@@ -113,6 +113,7 @@ void Responder::login(string buf){
 		cout << "Udane\n";
 		send_info_code("401|"+temp);
 		check_for_unsent_msgs();
+		tell_his_friends();
 		return;
 	}
 	cout << "Nieudane\n";
@@ -126,6 +127,7 @@ void Responder::logout(string buf){
 		this->klient->logged_in = false;
 		this->klient->socket = -1;
 		this->klient = NULL;
+		tell_his_friends();
 		cout << "Udane\n";
 		send_info_code("402|1");
 		return;
@@ -213,7 +215,7 @@ void Responder::sendFriends(string buf){
 	if (this->klient && this->klient->logged_in) {
 		cout << this->klient->login << " pobiera znajomych " << endl;
 		for (Klient* k : this->klient->friends) {
-			temp = temp + k->nick + "," + k->login + ","+k->description+","+k->str_log()+"|";
+			temp = temp + k->nick + "," + k->login + ","+k->description+","+k->str_log()+",";
 		}
 		if(temp.length() > 0)
 			temp = temp.substr(0, temp.length() - 1);
@@ -235,7 +237,7 @@ void Responder::sendHistory(string buf) {
 		Conversation* c = conv_it->second;
 		for (Message* m : c->getMessages()) {
 			buf = buf + "|" + m->toString2();
-		}
+		}	
 		if(buf == "407") buf = buf + "|";
 		cout << "Udane\n";
 		send_info_code(buf);
@@ -262,6 +264,7 @@ void Responder::change_description(string buf){
 	if(this -> klient && this -> klient -> logged_in && buf != " "){
 		if(buf.length() == 0) buf = " ";
 		this->klient->description = buf;
+		tell_his_friends();
 		cout << "Udane\n";
 		send_info_code("409|1");
 	}else{
@@ -303,6 +306,14 @@ void Responder::send_conv_id(string buf){
 	}
 	send_info_code("411|0");
 	return;
+}
+
+void Responder::tell_his_friends(){
+	string info = "501|"+this->klient->login+"|"+this->klient->description+"|"+this->klient->str_log()+"\n";
+	const char* msg = info.c_str();
+	for(Klient* k : this->klient->friends){
+		write(k -> socket, msg, info.length());
+	}
 }
 
 bool Responder::sendMsg(Message*m, Klient* to) {
