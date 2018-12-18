@@ -12,18 +12,20 @@
 111 - id konwesracji z uzytkownikiem o loginie login
 
 500 - wiadomosc od uzytkownika o loginie login
+501 - friend o loginie login zaktualizował description lub logged_in
 
 100|ID_conv|wiadomosc						response: 400|0 lub 400|1
 101|login|haslo								response: 401|0 lub 401|nick|description|nick1,login1,description1,logged_in1,nick2,login2,description2,logged_in2...
 102|										response: 402|0 lub 402|1
 103|nick|login|haslo						response: 403|0 lub 403|1
-104|login									response: 404|0 lub 404|nick1,login1|nick2,login2...
+104|login									response: 404|0 lub 404|nick1,login1,nick2,login2...
 105|login									response: 405|0 lub 405|nick|login|description|logged_in
 106|										response: 406|0 lub 406|nick1,login1,description1,logged_in1,nick2,login2,description2,logged_in2...
-107|ID_conv									response: 407|0 lub 407|login1,data1,godzina1,wiadomosc1|login2,...
-108|login1|login2|login3...					response: 408|0 lub 408|ID_conv,login1,login2,login3...
+107|ID_conv									response: 407|0 lub 407|ID_conv|members|login1,data1,godzina1,wiadomosc1|login2,... //jeśli konwersacja jest pusta to zamiast login,data.. wstaw " "
+108|login1,login2,login3...					response: 408|0 lub 408|ID_conv|login1,login2,login3...
 109|description								response: 409|0 lub 409|1
 110|login 									response: 410|0 lub 410|1
 111|login 									response: 411|0 lub 411|id_conv
 
 500|login|ID_conv|data|godzina|wiadomosc
+501|login|description|logged_in

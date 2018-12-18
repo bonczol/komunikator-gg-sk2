@@ -118,7 +118,6 @@ int main(int argc, char* argv[])
 	ServerSerializer s;
 	std::ifstream pFile("serializedServer.txt", std::ifstream::in);
 	bool empty = pFile.peek() == ifstream::traits_type::eof();
-	cout << empty << endl;
 	if(!empty) s.deserialize();
 	cout << "Entering the loop\nTo stop the server press c+Enter\n";
 	char c;

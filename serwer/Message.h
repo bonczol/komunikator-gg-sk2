@@ -12,6 +12,8 @@ private:
 	int id_conv;
 	Klient* sender;
 
+	std::string padTo(std::string str, const size_t num = 2, const char paddingChar = '0');
+
 public:
 	static std::map<Message*, Klient*> UNSENT_MSGS_BUFFER; 
 	static pthread_mutex_t unsent_buffer_mutex;
