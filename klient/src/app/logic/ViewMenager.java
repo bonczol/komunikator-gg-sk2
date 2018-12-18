@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class ViewMenager {
     public static LogInController logInController;
     public static MenuController menuController;
-    public static ArrayList<ChatController> chatControllers;
+    public static ArrayList<ChatController> chatControllers = new ArrayList<>();
     public static AddFriendController addFriendController;
     public static Parent loggInRoot;
     public static Parent menuRoot;

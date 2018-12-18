@@ -22,7 +22,10 @@ public class Receiver implements Runnable{
         while(running){
             try {
                 message = reader.readLine();
-                ResponseHandler responseHandler  = new ResponseHandler(message.split(Pattern.quote("|")));
+                System.out.println("---> Recived: " + message);
+                ResponseHandler responseHandler  = new ResponseHandler(
+                        message.split(Pattern.quote("|")), Client.getClient().getUser()
+                );
                 responseHandler.handleResponse();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -30,7 +33,4 @@ public class Receiver implements Runnable{
         }
     }
 
-    private void stop(){
-        this.running = false;
-    }
 }

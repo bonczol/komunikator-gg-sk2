@@ -6,10 +6,12 @@ import java.util.logging.Logger;
 
 public class ResponseHandler {
     private String[] response;
+    private LocalUser localUser;
     private static final Logger LOG = Logger.getLogger(ResponseHandler.class.getName());
 
-    public ResponseHandler(String[] response) {
+    public ResponseHandler(String[] response, LocalUser localUser) {
         this.response = response;
+        this.localUser = localUser;
     }
 
     public void handleResponse() {
@@ -43,6 +45,11 @@ public class ResponseHandler {
                 break;
             case 410:
                 catchDeleteFriendResp();
+                break;
+            case 500:
+                catchReceivedMassage();
+            case 501:
+                catchChangedStatus();
                 break;
         }
     }
@@ -111,30 +118,48 @@ public class ResponseHandler {
         if(response[1].equals("0"))
             LOG.log(Level.INFO, "Server: fail - add friend");
         else{
-            Client.getClient().getUser().addFriend(new User(response[1], response[2], response[3], response[4].equals("1")));
+            localUser.addFriend(new User(response[1], response[2], response[3], response[4].equals("1")));
             ViewMenager.menuController.refreshFriendsList();
             LOG.log(Level.INFO, "Server: success - add friend");
         }
     }
 
-    // response: 407|0 lub 407|ID_conv|login1,data1,godzina1,wiadomosc1,login2,...
+    // response: 407|0 lub 407|ID_conv|login1,login2|login1,data1,godzina1,wiadomosc1,login2,...
     private void catchGetMessageHistoryResp(){
         if(response[1].equals("0"))
             LOG.log(Level.INFO, "Server: fail - get message history");
         else{
-            String[] m =  response[2].split(",");
             ArrayList<Message> messages = new ArrayList<>();
-            User user;
+            if(!response[3].equals(" ")) {
 
-            for(int i = 0; i < m.length; i += 4){
-                if(m[i].equals(Client.getClient().getUser().getLogin()))
-                    user = Client.getClient().getUser();
-                else
-                    user = Client.getClient().getUser().getFriendByLogin(m[i]);
+                for (int j = 3; j < response.length; j++) {
+                    String[] m = response[j].split(",");
+                    User user;
+                    System.out.println("wiadomosc: " + m[0] + m[1] + m[2] + m[3]);
 
-                messages.add(new Message(user, m[i+1],m[i+2],m[i+3]));
+                    for (int i = 0; i < m.length; i += 4) {
+                        if (m[i].equals(Client.getClient().getUser().getLogin()))
+                            user = Client.getClient().getUser();
+                        else
+                            user = Client.getClient().getUser().getFriendByLogin(m[i]);
+
+                        messages.add(new Message(user, m[i + 1], m[i + 2], m[i + 3]));
+                    }
+                }
             }
-            Client.getClient().getUser().getConversationById(response[1]).setMessages(messages);
+            System.out.println("Liczba wiadomosci: " + messages.size());
+            if(Client.getClient().getUser().getConversationById(response[1]) != null){
+                Client.getClient().getUser().getConversationById(response[1]).setMessages(messages);
+                System.out.println("-----------> " + Client.getClient().getUser().getConversationById(response[1]).getId());
+            }
+            else{
+                ArrayList<User> users = new ArrayList<>(Client.getClient().getUser().getAllFriendsByLogin(response[2].split(",")));
+                users.add(Client.getClient().getUser());
+                Conversation conv = new Conversation(response[1], users);
+                conv.setMessages(messages);
+                localUser.addConversation( conv);
+
+            }
             LOG.log(Level.INFO, "Server: success - get message history");
         }
     }
@@ -144,9 +169,9 @@ public class ResponseHandler {
         if(response[1].equals("0"))
             LOG.log(Level.INFO, "Server: fail - new conversation");
         else{
-            Client.getClient().getUser().addConversation(
-                    new Conversation(response[1],
-                            Client.getClient().getUser().getAllFriendsByLogin(response[2].split(","))));
+            ArrayList<User> users = new ArrayList<>(Client.getClient().getUser().getAllFriendsByLogin(response[2].split(",")));
+            users.add(Client.getClient().getUser());
+            localUser.addConversation(new Conversation(response[1], users));
             LOG.log(Level.INFO, "Server: success - new conversation");
         }
     }
@@ -164,9 +189,35 @@ public class ResponseHandler {
     private void catchDeleteFriendResp(){
         if(response[1].equals("0"))
             LOG.log(Level.INFO, "Server: fail - delete friend");
-        else{
+        else
             LOG.log(Level.INFO, "Server: success - delete friend");
-        }
     }
+
+    // response: 500|ID_conv|login,data,godzina,wiadomosc
+    public void catchReceivedMassage(){
+        localUser.getConversationById(response[1]).getMessages().add(readMessage(response[2]));
+    }
+
+    // response: 501|login|description|logged_in
+    public void catchChangedStatus(){
+        User user = localUser.getFriendByLogin(response[1]);
+        user.setDescription(response[2]);
+        user.setOnline(response[3].equals(1));
+        LOG.log(Level.INFO, "Server: success - user changed status");
+    }
+
+    // Read message in format "login,data,godzina,wiadomosc"
+    private Message readMessage(String message){
+        String[] m = message.split(",");
+        User user;
+
+        if (m[0].equals(Client.getClient().getUser().getLogin()))
+            user = localUser;
+        else
+            user = localUser.getFriendByLogin(m[0]);
+
+        return new Message(user, m[1], m[2], m[3]);
+    }
+
 
 }

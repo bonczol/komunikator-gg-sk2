@@ -4,32 +4,35 @@ package app.logic;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.logging.Logger;
+
 
 public class Client {
+    private boolean connected;
     private static Client client;
     private Socket clientSocket;
     private Receiver receiver;
     private Sender sender;
     public LocalUser user;
+    private static final Logger LOG = Logger.getLogger(ResponseHandler.class.getName());
 
 
     private Client() {
+        this.clientSocket = new Socket();
+        this.connected = false;
+    }
+
+    public void connectToServer(String  serverIP, int port) {
         try {
-            this.clientSocket = new Socket();
+            clientSocket.connect(new InetSocketAddress(serverIP, port), 5000);
             this.sender = new Sender(this.clientSocket);
             this.receiver = new Receiver(this.clientSocket);
             Thread thread = new Thread(receiver);
             thread.start();
+            connected = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.info("Server unreachable");
         }
-        this.user = null;
-    }
-
-    public void connectToServer(String  serverIP, int port) throws IOException {
-        clientSocket.connect(new InetSocketAddress(serverIP, port), 5000);
     }
 
     public static synchronized Client getClient() {
@@ -50,4 +53,7 @@ public class Client {
         return user;
     }
 
+    public boolean isConnected() {
+        return connected;
+    }
 }

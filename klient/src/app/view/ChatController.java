@@ -4,6 +4,8 @@ package app.view;
 import app.logic.Client;
 import app.logic.Conversation;
 import app.logic.Message;
+import app.logic.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -42,12 +44,22 @@ public class ChatController implements Initializable {
 
         Client.getClient().getSender().sendTextMessage(conversation.getId(),stringMessage);
         conversation.getMessages().add(new Message(stringMessage));
+        refreshConversation();
     }
 
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
         obsvListMessages = FXCollections.observableArrayList(conversation.getMessages());
         setUpListView();
+        showConv();
+    }
+
+    public void refreshConversation(){
+        Platform.runLater(()->{
+            ObservableList<Message> tmp_obsv = FXCollections.observableArrayList(conversation.getMessages());
+            listViewConversation.setItems(null);
+            obsvListMessages = tmp_obsv;
+            listViewConversation.setItems(obsvListMessages);});
     }
 
     public void setUpListView(){
@@ -64,5 +76,13 @@ public class ChatController implements Initializable {
                 }
             }
         });
+    }
+
+    public void showConv(){
+        System.out.println(conversation.getId());
+        for(Message m : conversation.getMessages()){
+            System.out.println(m.getText());
+        }
+        System.out.println("\n");
     }
 }

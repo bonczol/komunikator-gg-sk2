@@ -90,8 +90,8 @@ public class MenuController implements Initializable {
         if(user != null){
             Client.getClient().getSender().sendDeleteFriendMessage(user.getLogin());
             Client.getClient().getUser().getFriends().remove(user);
+            refreshFriendsList();
         }
-
     }
 
     public void refreshFriendsList(){
@@ -119,9 +119,12 @@ public class MenuController implements Initializable {
             chatController.setConversation(conversation);
             ViewMenager.chatControllers.add(chatController);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
+            Platform.runLater(()-> {
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+            });
+
         } catch (IOException e) {
             e.printStackTrace();
         }

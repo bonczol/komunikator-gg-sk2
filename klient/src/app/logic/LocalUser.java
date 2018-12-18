@@ -12,13 +12,15 @@ public class LocalUser extends User {
     public LocalUser(String nickname, String login, String description, boolean online, ArrayList<User> friends) {
         super(nickname, login, description, online);
         this.friends = friends;
+        this.conversations = new ArrayList<>();
     }
 
     public void addConversation(Conversation conversation){
-        Client.getClient().getSender().sendGetHistoryMessage(conversation.getId());
+        //Client.getClient().getSender().sendGetHistoryMessage(conversation.getId());
         conversations.add(conversation);
         ViewMenager.menuController.showChatWindow(conversation);
     }
+
 
     public ArrayList<User> getAllFriendsByLogin(String[] logins){
         ArrayList<User> friends = new ArrayList<>();
@@ -57,11 +59,9 @@ public class LocalUser extends User {
     }
 
     public User getFriendByLogin(String login) {
-        for (User u : this.friends) {
-            if (login.equals(u.login)) {
+        for (User u : this.friends)
+            if (login.equals(u.login))
                 return u;
-            }
-        }
         return null;
     }
 

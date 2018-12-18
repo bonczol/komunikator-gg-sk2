@@ -18,6 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 public class LogInController {
@@ -32,23 +34,18 @@ public class LogInController {
     @FXML
     private Label labelInfo;
 
-    private boolean connecting = false;
 
-
-    public void singIn(){
-        new Thread(() -> {
-            Platform.runLater(()->{
-                setInfoText("Connecting");
-            });
-            try {
-                Client.getClient().connectToServer("192.168.0.20", 1338);
-                Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
-            } catch (IOException e) {
-                Platform.runLater(()->{
-                    setInfoText("Can't reach server");
-                });
-            }
-        }).start();
+    public void singIn() {
+        labelInfo.setText("Conecting...");
+        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+//        CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.19", 1337))
+//                .handle((res, ex) -> {
+//                    if (Client.getClient().isConnected())
+//                        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+//                    else
+//                        Platform.runLater(() -> labelInfo.setText("Can't reach server"));
+//                    return res;
+//                });
     }
 
     public void signUp(){
@@ -89,33 +86,4 @@ public class LogInController {
         stage.setOnHiding( event -> {Client.getClient().getSender().sendSignOutMessage();} );
     }
 
-    public void setInfoText(String text){
-        labelInfo.setText(text);
-    }
-
-
-
-    public void connectAnimation(){
-        connecting = true;
-        Platform.runLater(()->{
-            while (connecting){
-                try {
-                    setInfoText("Connecting ");
-                    TimeUnit.MILLISECONDS.sleep(400);
-                    setInfoText("Connecting. ");
-                    TimeUnit.MILLISECONDS.sleep(400);
-                    setInfoText("Connecting.. ");
-                    TimeUnit.MILLISECONDS.sleep(400);
-                    setInfoText("Connecting... ");
-                    TimeUnit.MILLISECONDS.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void stopConnectAnimation(){
-        connecting = false;
-    }
 }

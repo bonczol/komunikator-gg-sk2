@@ -11,6 +11,7 @@ public class Conversation {
     public Conversation(String id, ArrayList<User> members) {
         this.id = id;
         this.members = members;
+        this.messages = new ArrayList<>();
     }
 
     public String getId() {
@@ -28,4 +29,5 @@ public class Conversation {
     public void setMessages(ArrayList<Message> messages) {
         this.messages = messages;
     }
+
 }
