@@ -125,43 +125,18 @@ public class ResponseHandler {
     }
 
     // response: 407|0 lub 407|ID_conv|login1,login2|login1,data1,godzina1,wiadomosc1,login2,...
-    private void catchGetMessageHistoryResp(){
-        if(response[1].equals("0"))
+    private void catchGetMessageHistoryResp() {
+        if (response[1].equals("0"))
             LOG.log(Level.INFO, "Server: fail - get message history");
-        else{
+        else {
             ArrayList<Message> messages = new ArrayList<>();
-            if(!response[3].equals(" ")) {
+            if (!response[3].equals(" "))
+                for (int j = 3; j < response.length; j++)
+                    messages.add(readMessage(response[j]));
 
-                for (int j = 3; j < response.length; j++) {
-                    String[] m = response[j].split(",");
-                    User user;
-                    System.out.println("wiadomosc: " + m[0] + m[1] + m[2] + m[3]);
-
-                    for (int i = 0; i < m.length; i += 4) {
-                        if (m[i].equals(Client.getClient().getUser().getLogin()))
-                            user = Client.getClient().getUser();
-                        else
-                            user = Client.getClient().getUser().getFriendByLogin(m[i]);
-
-                        messages.add(new Message(user, m[i + 1], m[i + 2], m[i + 3]));
-                    }
-                }
-            }
-            System.out.println("Liczba wiadomosci: " + messages.size());
-            if(Client.getClient().getUser().getConversationById(response[1]) != null){
-                Client.getClient().getUser().getConversationById(response[1]).setMessages(messages);
-                System.out.println("-----------> " + Client.getClient().getUser().getConversationById(response[1]).getId());
-            }
-            else{
-                ArrayList<User> users = new ArrayList<>(Client.getClient().getUser().getAllFriendsByLogin(response[2].split(",")));
-                users.add(Client.getClient().getUser());
-                Conversation conv = new Conversation(response[1], users);
-                conv.setMessages(messages);
-                localUser.addConversation( conv);
-
-            }
-            LOG.log(Level.INFO, "Server: success - get message history");
+            localUser.getConversations().add(createNewConv(response[1], response[2].split(","), messages));
         }
+        LOG.log(Level.INFO, "Server: success - get message history");
     }
 
     // response: 408|0 lub 408|ID_conv
@@ -169,11 +144,18 @@ public class ResponseHandler {
         if(response[1].equals("0"))
             LOG.log(Level.INFO, "Server: fail - new conversation");
         else{
-            ArrayList<User> users = new ArrayList<>(Client.getClient().getUser().getAllFriendsByLogin(response[2].split(",")));
-            users.add(Client.getClient().getUser());
-            localUser.addConversation(new Conversation(response[1], users));
+            Conversation newConversation = createNewConv(response[1], response[2].split(","), new ArrayList<>());
+            localUser.getConversations().add(newConversation);
+            ViewMenager.menuController.showChatWindow(newConversation);
             LOG.log(Level.INFO, "Server: success - new conversation");
         }
+    }
+
+    //  create new conversation when you have only string logins, not objects
+    private Conversation createNewConv(String convId, String[] logins, ArrayList<Message> messages){
+        ArrayList<User> users = new ArrayList<>(localUser.getAllFriendsByLogin(response[2].split(",")));
+        users.add(localUser);
+        return new Conversation(convId, users, messages);
     }
 
     // response: 409|0 lub 409|1

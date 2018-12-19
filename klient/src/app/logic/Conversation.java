@@ -8,8 +8,14 @@ public class Conversation {
     private ArrayList<User> members;
     private ArrayList<Message> messages;
 
-    public Conversation(String id, ArrayList<User> members) {
+    public Conversation(String id, ArrayList<User> members, ArrayList<Message> messages) {
         this.id = id;
+        this.members = members;
+        this.messages = messages;
+    }
+
+    public Conversation(ArrayList<User> members){
+        this.id = null;
         this.members = members;
         this.messages = new ArrayList<>();
     }

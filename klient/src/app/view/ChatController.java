@@ -41,7 +41,6 @@ public class ChatController implements Initializable {
 
     public void sendMessage(){
         String stringMessage = textAreaMessage.getText();
-
         Client.getClient().getSender().sendTextMessage(conversation.getId(),stringMessage);
         conversation.getMessages().add(new Message(stringMessage));
         refreshConversation();
@@ -62,7 +61,7 @@ public class ChatController implements Initializable {
             listViewConversation.setItems(obsvListMessages);});
     }
 
-    public void setUpListView(){
+    private void setUpListView(){
         listViewConversation.setItems(obsvListMessages);
         listViewConversation.setCellFactory(param -> new ListCell<Message>() {
             @Override

@@ -68,7 +68,7 @@ public class MenuController implements Initializable {
 
         listViewUsers.setItems(observableListUsers);
         listViewUsers.setCellFactory(observableListUsers -> new UserCellController() );
-        createNewConversationListener();
+        createShowConversationListener();
     }
 
     public void showAddFriendWindow(){
@@ -102,11 +102,18 @@ public class MenuController implements Initializable {
             listViewUsers.setItems(observableListUsers);});
     }
 
-    private void createNewConversationListener(){
+    private void createShowConversationListener(){
         listViewUsers.setOnMouseClicked(click -> {
-            if (click.getClickCount() == 2)
-                Client.getClient().getSender().sendNewConvMessage(new String[]{Client.getClient().user.getLogin(),
-                        listViewUsers.getSelectionModel().getSelectedItem().getLogin()});
+            if (click.getClickCount() == 2){
+                User user = listViewUsers.getSelectionModel().getSelectedItem();
+                Conversation conversation =  Client.getClient().getUser().getConvWithUser(user);
+
+                if(conversation == null)
+                    Client.getClient().getSender().sendNewConvMessage(new String[]{Client.getClient().user.getLogin(),
+                            user.getLogin()});
+                else
+                    showChatWindow(conversation);
+            }
         });
     }
 
@@ -114,7 +121,6 @@ public class MenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chat.fxml"));
         try {
             Parent root = loader.load();
-
             ChatController chatController = loader.getController();
             chatController.setConversation(conversation);
             ViewMenager.chatControllers.add(chatController);
@@ -124,7 +130,6 @@ public class MenuController implements Initializable {
                 stage.setScene(new Scene(root));
                 stage.show();
             });
-
         } catch (IOException e) {
             e.printStackTrace();
         }

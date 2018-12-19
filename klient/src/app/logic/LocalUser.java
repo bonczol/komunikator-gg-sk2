@@ -15,12 +15,6 @@ public class LocalUser extends User {
         this.conversations = new ArrayList<>();
     }
 
-    public void addConversation(Conversation conversation){
-        //Client.getClient().getSender().sendGetHistoryMessage(conversation.getId());
-        conversations.add(conversation);
-        ViewMenager.menuController.showChatWindow(conversation);
-    }
-
 
     public ArrayList<User> getAllFriendsByLogin(String[] logins){
         ArrayList<User> friends = new ArrayList<>();
@@ -35,10 +29,19 @@ public class LocalUser extends User {
     }
 
     public Conversation getConversationById(String id_conv){
-        for (Conversation c: conversations){
+        for (Conversation c: conversations)
             if(c.getId().equals(id_conv))
                 return c;
-        }
+
+        return null;
+    }
+
+    public Conversation getConvWithUser(User user){
+        for(Conversation c :conversations)
+            for(User m : c.getMembers())
+                if(user == m)
+                    return c;
+
         return null;
     }
 
