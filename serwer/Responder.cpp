@@ -81,7 +81,6 @@ void Responder::message(string buf){
 		for (Klient* k : c->getClients()) {
 			if (k->login != this->klient->login){
 				if(k->logged_in) sendMsg(m, k);
-				//else Message::push_to_unsent_buffer(k, m);
 			} 
 		}
 		cout << "Wyslano\n";
@@ -193,17 +192,31 @@ void Responder::addFriend(string buf){
 	bool already_friend = false;
 	if (this->klient && this->klient->logged_in && this->klient->login != buf) {
 		cout << this -> klient->login << " dodaje " << buf << endl;
-		pthread_mutex_lock(&Klient::clients_mutex);
-		std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
+		//check if he is already a friend
 		for(Klient* f : this->klient->friends){
 			if(f->login == buf) already_friend = true;
 		}
+
+		pthread_mutex_lock(&Klient::clients_mutex);
+		std::map<string, Klient*>::iterator klient_it = Klient::CLIENTS.find(login);
 		if (klient_it != Klient::CLIENTS.end() && !already_friend) {
+			//if such client exists
 			pthread_mutex_unlock(&Klient::clients_mutex);
+			//add each other to friends
 			this->klient->friends.push_back(klient_it->second);
+			klient_it->second->friends.push_back(this->klient);
 			cout << "Udane\n";
+			//send info to my client
 			send_info_code("405|" + klient_it->second->nick+"|" +klient_it->second->login+"|"+klient_it->second->description +
 			 "|" + klient_it->second->str_log());
+			//if new friend is logged in, send him info too
+			if(klient_it->second->logged_in){
+				string info = "405|"+this->klient->nick+"|"+this->klient->login+"|"+
+				this->klient->description + "|" + this->klient->str_log()+"\n";
+				const char* msg = info.c_str();
+				if(klient_it->second->logged_in)
+					write(klient_it->second->socket, msg, info.length());
+			}
 			return;
 		}
 		pthread_mutex_unlock(&Klient::clients_mutex);

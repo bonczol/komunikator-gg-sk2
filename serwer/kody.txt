@@ -27,5 +27,5 @@
 110|login 									response: 410|0 lub 410|1
 111|login 									response: 411|0 lub 411|id_conv
 
-500|login|ID_conv|data|godzina|wiadomosc
+500|ID_conv|login,data,godzina,wiadomosc
 501|login|description|logged_in
