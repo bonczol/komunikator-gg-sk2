@@ -26,7 +26,7 @@ void Message::push_to_unsent_buffer(Klient* k, Message* m){
 Message::~Message(){}
 
 string Message::toString1() {
-	return this->sender->login + "|" + to_string(this->id_conv) + "|" + date + "|" + time + "|" + msg;
+	return to_string(this->id_conv) + "|"+ this->sender->login + "," + date + "," + time + "," + msg;
 }
 
 string Message::toString2() {
