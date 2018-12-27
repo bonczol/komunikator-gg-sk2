@@ -59,6 +59,7 @@ public class MenuController implements Initializable {
                 Client.getClient().getUser().setDescription(description);
                 Client.getClient().getSender().sendChangeDescMessage(description);
                 Platform.runLater(() -> textAreaDescription.getParent().requestFocus());
+                ke.consume();
             }
         });
 

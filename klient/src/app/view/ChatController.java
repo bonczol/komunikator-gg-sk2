@@ -34,14 +34,17 @@ public class ChatController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Send message when ENTER is pressed
         textAreaMessage.setOnKeyPressed(ke -> {
-            if (ke.getCode().equals(KeyCode.ENTER))
+            if (ke.getCode().equals(KeyCode.ENTER) && !textAreaMessage.getText().isEmpty()){
                 sendMessage();
+                textAreaMessage.clear();
+                ke.consume();
+            }
         });
     }
 
     public void sendMessage(){
-        String stringMessage = textAreaMessage.getText();
-        Client.getClient().getSender().sendTextMessage(conversation.getId(),stringMessage);
+        String stringMessage = removeSpacesBeginning(textAreaMessage.getText());
+        Client.getClient().getSender().sendTextMessage(conversation.getId(), stringMessage);
         conversation.getMessages().add(new Message(stringMessage));
         refreshConversation();
     }
@@ -71,7 +74,7 @@ public class ChatController implements Initializable {
                 if (empty || message == null) {
                     setText(null);
                 } else {
-                    setText(message.getTime() + " " + message.getAuthor() + ": " + message.getText());
+                    setText(message.getTime() + " " + message.getAuthor().getLogin() + ": " + message.getText());
                 }
             }
         });
@@ -84,4 +87,21 @@ public class ChatController implements Initializable {
         }
         System.out.println("\n");
     }
+
+    private String removeSpacesBeginning(String message){
+        if(message.length() > 0){
+            int i = 0;
+            while(i < message.length()){
+                if((' ' == message.charAt(i)))
+                    i++;
+                else{
+                    if(i > 0)
+                        message = message.substring(i);
+                    break;
+                }
+            }
+        }
+        return message;
+    }
+
 }

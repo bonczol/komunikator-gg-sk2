@@ -29,7 +29,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         System.setProperty("line.separator", "\n"); // Unix line separator
-        Client.getClient().connectToServer("192.168.0.19", 1337);
+        Client.getClient().connectToServer("192.168.0.20", 1337);
         launch(args);
     }
 

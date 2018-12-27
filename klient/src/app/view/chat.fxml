@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="261.0" minWidth="420.0" prefHeight="273.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.ChatController">
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.ChatController">
    <children>
-      <ListView fx:id="listViewConversation" layoutX="14.0" layoutY="14.0" prefHeight="153.0" prefWidth="394.0" />
-      <Button fx:id="buttonSend" layoutX="386.0" layoutY="205.0" maxHeight="25.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" prefWidth="28.0" text="Send" AnchorPane.rightAnchor="14.0" />
-      <TextArea fx:id="textAreaMessage" layoutX="14.0" layoutY="175.0" prefHeight="79.0" prefWidth="362.0" promptText="Type your message ..." AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="175.0" />
+      <VBox minHeight="250.0" minWidth="400.0" prefHeight="360.0" prefWidth="518.0">
+         <children>
+            <ListView fx:id="listViewConversation" prefHeight="172.0" prefWidth="399.0"  VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="2.0" right="2.0" top="5.0" />
+               </VBox.margin>
+            </ListView>
+            <HBox prefHeight="68.0" prefWidth="490.0">
+               <children>
+                  <TextArea fx:id="textAreaMessage" prefHeight="58.0" prefWidth="455.0" wrapText="true" promptText="Type your message ...">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" />
+                     </HBox.margin>
+                  </TextArea>
+                  <Button fx:id="buttonSend" maxHeight="25.0" minWidth="-Infinity" mnemonicParsing="false"  onAction="#sendMessage" prefHeight="25.0" prefWidth="28.0" text="Send">
+                     <HBox.margin>
+                        <Insets left="10.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </children>
    <stylesheets>
       <URL value="@style.css" />

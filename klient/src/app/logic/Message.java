@@ -6,22 +6,22 @@ import java.time.LocalTime;
 
 public class Message {
     private User author;
-    private String time;
     private String date;
+    private String time;
     private String text;
 
-    public Message(User author, String time, String date, String text) {
+    public Message(User author, String date, String time, String text) {
         this.author = author;
-        this.time = time;
         this.date = date;
+        this.time = time;
         this.text = text;
     }
 
     public Message(String text) {
         this.author = Client.getClient().getUser();
-        this.text = text;
         this.date = LocalDate.now().toString();
-        this.date = LocalTime.now().toString();
+        this.time = LocalTime.now().toString();
+        this.text = text;
     }
 
     public User getAuthor() {

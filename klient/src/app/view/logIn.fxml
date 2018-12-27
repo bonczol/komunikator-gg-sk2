@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import java.net.URL?>
 <AnchorPane maxHeight="603.0" maxWidth="502.0" minHeight="280.0" minWidth="320.0" prefHeight="600.0" prefWidth="400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.LogInController">
    <children>
       <TextField fx:id="textFieldLogin" alignment="CENTER" layoutX="55.0" layoutY="125.0" prefHeight="54.0" prefWidth="297.0" promptText="LOGIN" />
@@ -19,4 +20,7 @@
       <Separator layoutX="41.0" layoutY="552.0" prefHeight="0.0" prefWidth="325.0" />
       <Label fx:id="labelInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="52.0" layoutY="315.0" prefHeight="19.0" prefWidth="297.0" styleClass="infoLabel" />
    </children>
+   <stylesheets>
+      <URL value="@style.css" />
+   </stylesheets>
 </AnchorPane>

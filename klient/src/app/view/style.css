@@ -95,7 +95,7 @@
 }
 
 .list-cell:odd { /* <=== changed to even */
-    -fx-background-color: #EAF7E6;
+    -fx-background-color: #E6E8E5;
 }
 
 .list-cell:even { /* <=== changed to even */

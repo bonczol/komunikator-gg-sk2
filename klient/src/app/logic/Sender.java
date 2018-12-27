@@ -15,6 +15,7 @@ public class Sender{
     }
 
     public void sendTextMessage(String convID, String message){
+        message.replace("\n", "").replace("\r", "");
         writer.println("100" + this.sep + convID + this.sep + message);
     }
 
