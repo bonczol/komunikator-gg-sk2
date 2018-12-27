@@ -14,7 +14,7 @@
         <PasswordField fx:id="textFieldPassword" alignment="CENTER" layoutX="52.0" layoutY="271.0" prefHeight="54.0" prefWidth="297.0" promptText="PASSWORD" />
         <PasswordField fx:id="textFieldRepeatPassword" alignment="CENTER" layoutX="52.0" layoutY="343.0" prefHeight="54.0" prefWidth="297.0" promptText="REPEAT PASSSWORD" />
         <Button fx:id="buttonSignUpReg" layoutX="53.0" layoutY="475.0" mnemonicParsing="false" onAction="#signUp" prefHeight="41.0" prefWidth="304.0" styleClass="bigButton" text="sign up" />
-        <Label fx:id="labelInfo" contentDisplay="CENTER" layoutX="56.0" layoutY="430.0" prefHeight="29.0" prefWidth="297.0" />
+        <Label fx:id="labelInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="56.0" layoutY="430.0" prefHeight="29.0" prefWidth="297.0" styleClass="infoLabel" />
         <Button fx:id="buttonBack" layoutY="572.0" mnemonicParsing="false" onAction="#backToLoggIn" styleClass="smallButton" text="&lt;&lt; back" />
     </children>
     <stylesheets>

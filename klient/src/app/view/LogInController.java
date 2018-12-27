@@ -39,7 +39,7 @@ public class LogInController {
         labelInfo.setText("Conecting...");
 //        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
         if(!Client.getClient().isConnected()){
-            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.19", 1337))
+            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.20", 1337))
                     .handle((res, ex) -> {
                         if (Client.getClient().isConnected())
                             Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
@@ -53,7 +53,7 @@ public class LogInController {
 
     public void signUp(){
         Scene scene = textFieldLogin.getScene();
-        FXMLLoader registerLoader = new FXMLLoader(getClass().getResource("../view/register.fxml"));
+        FXMLLoader registerLoader = new FXMLLoader(getClass().getResource("register.fxml"));
         Parent registerRoot = null;
         try {
             registerRoot = registerLoader.load();
@@ -61,6 +61,7 @@ public class LogInController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        labelInfo.setText("");
     }
 
     public void accessGranted(String nickname, String description, ArrayList<User> friends) {
@@ -78,7 +79,7 @@ public class LogInController {
 
     public void showMenuWindow(){
         Stage stage = (Stage) textFieldLogin.getScene().getWindow();
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("Menu.fxml"));
         try {
             ViewMenager.menuRoot = menuLoader.load();
             ViewMenager.menuController = menuLoader.getController();

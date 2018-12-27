@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -32,10 +33,6 @@ public class MenuController implements Initializable {
     private Button buttonAdd;
     @FXML
     private Button buttonDelete;
-    @FXML
-    private ToggleButton buttonFriends;
-    @FXML
-    private ToggleButton buttonGroups;
     @FXML
     private ListView<User> listViewUsers;
     @FXML
@@ -65,7 +62,7 @@ public class MenuController implements Initializable {
 
         // Set local user nick and description
         labelUserName.setText(Client.getClient().getUser().getNickname());
-        labelDescription.setText(Client.getClient().getUser().getDescription());
+        textAreaDescription.setText(Client.getClient().getUser().getDescription());
 
         listViewUsers.setItems(observableListUsers);
         listViewUsers.setCellFactory(observableListUsers -> new UserCellController() );
@@ -116,6 +113,7 @@ public class MenuController implements Initializable {
             Platform.runLater(()-> {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
+                stage.getIcons().add(new Image("/resources/img/icons8-sms-48.png"));
                 stage.show();
             });
         } catch (IOException e) {
@@ -131,6 +129,7 @@ public class MenuController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Add friend");
+            stage.getIcons().add(new Image("/resources/img/icons8-sms-48.png"));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

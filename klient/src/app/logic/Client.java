@@ -32,6 +32,7 @@ public class Client {
             connected = true;
         } catch (IOException e) {
             LOG.info("Server unreachable");
+            connected = false;
         }
     }
 

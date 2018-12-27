@@ -36,7 +36,7 @@ public class RegisterController {
 
     public void signUp(){
         if(!Client.getClient().isConnected()){
-            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.19", 1337))
+            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.20", 1337))
                     .handle((res, ex) -> {
                         if (Client.getClient().isConnected())
                             sendSingUpMes();
@@ -49,13 +49,16 @@ public class RegisterController {
     }
 
     private void sendSingUpMes(){
-        if(textFieldPassword.getText().equals(textFieldRepeatPassword.getText()))
+        if(textFieldPassword.getText().equals(textFieldRepeatPassword.getText())){
             Client.getClient().getSender().sendSignUpMessage(textFieldNick.getText(), textFieldLogin.getText(), textFieldPassword.getText());
+            Platform.runLater(()->labelInfo.setText("Account created !"));
+        }
         else
-            labelInfo.setText("Passwords do not match ");
+            Platform.runLater(()->labelInfo.setText("Passwords do not match "));
     }
 
     public void backToLoggIn(){
+        labelInfo.setText("");
         Scene scene = textFieldLogin.getScene();
         scene.setRoot(ViewMenager.loggInRoot);
     }
