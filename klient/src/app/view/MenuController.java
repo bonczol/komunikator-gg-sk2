@@ -72,19 +72,6 @@ public class MenuController implements Initializable {
         createShowConversationListener();
     }
 
-    public void showAddFriendWindow(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("addFriend.fxml"));
-        try {
-            Parent root = loader.load();
-            ViewMenager.addFriendController = loader.getController();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add friend");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void deleteFriend(){
         User user = listViewUsers.getSelectionModel().getSelectedItem();
@@ -131,6 +118,20 @@ public class MenuController implements Initializable {
                 stage.setScene(new Scene(root));
                 stage.show();
             });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAddFriendWindow(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("addFriend.fxml"));
+        try {
+            Parent root = loader.load();
+            ViewMenager.addFriendController = loader.getController();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add friend");
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -3,6 +3,7 @@ package app.view;
 import app.logic.Client;
 import app.logic.Main;
 import app.logic.ViewMenager;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javax.swing.text.View;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 public class RegisterController {
     @FXML
@@ -33,10 +35,22 @@ public class RegisterController {
 
 
     public void signUp(){
-        if(textFieldPassword.getText().equals(textFieldRepeatPassword.getText())){
+        if(!Client.getClient().isConnected()){
+            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.19", 1337))
+                    .handle((res, ex) -> {
+                        if (Client.getClient().isConnected())
+                            sendSingUpMes();
+                        else
+                            Platform.runLater(() -> labelInfo.setText("Can't reach server"));
+                        return res;
+                    });
+        }else
+            sendSingUpMes();
+    }
+
+    private void sendSingUpMes(){
+        if(textFieldPassword.getText().equals(textFieldRepeatPassword.getText()))
             Client.getClient().getSender().sendSignUpMessage(textFieldNick.getText(), textFieldLogin.getText(), textFieldPassword.getText());
-            labelInfo.setText("Connecting ...");
-        }
         else
             labelInfo.setText("Passwords do not match ");
     }

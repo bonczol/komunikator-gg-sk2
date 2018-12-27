@@ -37,15 +37,18 @@ public class LogInController {
 
     public void singIn() {
         labelInfo.setText("Conecting...");
-        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
-//        CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.19", 1337))
-//                .handle((res, ex) -> {
-//                    if (Client.getClient().isConnected())
-//                        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
-//                    else
-//                        Platform.runLater(() -> labelInfo.setText("Can't reach server"));
-//                    return res;
-//                });
+//        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+        if(!Client.getClient().isConnected()){
+            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.19", 1337))
+                    .handle((res, ex) -> {
+                        if (Client.getClient().isConnected())
+                            Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+                        else
+                            Platform.runLater(() -> labelInfo.setText("Can't reach server"));
+                        return res;
+                    });
+        }else
+            Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
     }
 
     public void signUp(){
