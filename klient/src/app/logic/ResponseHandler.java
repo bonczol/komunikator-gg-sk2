@@ -48,6 +48,7 @@ public class ResponseHandler {
                 break;
             case 500:
                 catchReceivedMassage();
+                break;
             case 501:
                 catchChangedStatus();
                 break;
@@ -177,7 +178,8 @@ public class ResponseHandler {
 
     // response: 500|ID_conv|login,data,godzina,wiadomosc
     public void catchReceivedMassage(){
-        localUser.getConversationById(response[1]).getMessages().add(readMessage(response[2]));
+        Conversation conv =  localUser.getConversationById(response[1]);
+        conv.getMessages().add(readMessage(response[2]));
     }
 
     // response: 501|login|description|logged_in
