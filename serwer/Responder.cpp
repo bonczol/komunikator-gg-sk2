@@ -285,8 +285,18 @@ void Responder::newConv(string buf) {
 	cout << "Udane\n";
 	int id_conv = c->getID();
 	send_info_code("408|" + to_string(id_conv)+"|" + temp);
-	for(Klient* k : clients)
+
+	string info = "502|"+this->klient->login+"|"
+							+this->klient->nick + "|"
+							+this->klient->description+"|"
+							+this->klient->str_log()+ "|"
+							+to_string(id_conv) + "\n";
+	const char* msg = info.c_str();
+	for(Klient* k : clients){
 		k->ID_convs.push_front(id_conv);
+		if(k->logged_in && k!=this->klient)
+			write(k -> socket, msg, info.length());
+	}
 	return;
 }
 

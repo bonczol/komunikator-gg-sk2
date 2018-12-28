@@ -142,6 +142,11 @@ int main(int argc, char* argv[])
 				Klient::CLIENTS.erase(login);
 			pthread_mutex_unlock(&Klient::clients_mutex);
 		}
+		else if(c == 'h'){
+			cout << "k - wyświetl klientów" << endl;
+			cout << "d - usuń klienta" << endl;
+			cout << "c - serializuj i wyłącz serwer" << endl;
+		}
 		sleep(1);
 	}
 	close(server_socket_descriptor);
