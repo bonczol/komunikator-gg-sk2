@@ -286,11 +286,7 @@ void Responder::newConv(string buf) {
 	int id_conv = c->getID();
 	send_info_code("408|" + to_string(id_conv)+"|" + temp);
 
-	string info = "502|"+this->klient->login+"|"
-							+this->klient->nick + "|"
-							+this->klient->description+"|"
-							+this->klient->str_log()+ "|"
-							+to_string(id_conv) + "\n";
+	string info = "502|"+to_string(id_conv)+"|" + temp+ "\n";
 	const char* msg = info.c_str();
 	for(Klient* k : clients){
 		k->ID_convs.push_front(id_conv);
