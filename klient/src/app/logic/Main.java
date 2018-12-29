@@ -4,6 +4,7 @@ package app.logic;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -18,9 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loggInLoader = new FXMLLoader(getClass().getResource("/app/view/logIn.fxml"));
-        ViewMenager.loggInRoot = loggInLoader.load();
-        ViewMenager.logInController = loggInLoader.getController();
+        Parent root = FXMLLoader.load(getClass().getResource("/app/view/connect.fxml"));
 
         primaryStage.setOnHiding( event -> {
             if(Client.getClient().isConnected())
@@ -28,8 +27,8 @@ public class Main extends Application {
         } );
 
         primaryStage.getIcons().add(new Image("/resources/img/icons8-sms-48.png"));
-        primaryStage.setTitle("Bajdu bajdu");
-        primaryStage.setScene(new Scene(ViewMenager.loggInRoot));
+        primaryStage.setTitle("Bajdu");
+        primaryStage.setScene(new Scene(root));
         primaryStage.sizeToScene();
         primaryStage.show();
     }

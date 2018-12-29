@@ -37,7 +37,7 @@ public class LogInController {
 
     public void singIn() {
         labelInfo.setText("Conecting...");
-//        Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
+
         if(!Client.getClient().isConnected()){
             CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.20", 1337))
                     .handle((res, ex) -> {

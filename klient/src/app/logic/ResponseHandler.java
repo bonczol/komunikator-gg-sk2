@@ -1,5 +1,8 @@
 package app.logic;
 
+import app.view.ChatController;
+
+import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,6 +55,8 @@ public class ResponseHandler {
             case 501:
                 catchChangedStatus();
                 break;
+            case 502:
+                catchConvCreated();
         }
     }
 
@@ -177,16 +182,20 @@ public class ResponseHandler {
     }
 
     // response: 500|ID_conv|login,data,godzina,wiadomosc
-    public void catchReceivedMassage(){
+    private void catchReceivedMassage(){
         Conversation conv =  localUser.getConversationById(response[1]);
         conv.getMessages().add(readMessage(response[2]));
+        ChatController controller = ViewMenager.getChatContr(conv);
+        if(controller != null)
+            controller.refreshConversation();
     }
 
     // response: 501|login|description|logged_in
-    public void catchChangedStatus(){
+    private void catchChangedStatus(){
         User user = localUser.getFriendByLogin(response[1]);
         user.setDescription(response[2]);
-        user.setOnline(response[3].equals(1));
+        user.setOnline(response[3].equals("1"));
+        ViewMenager.menuController.refreshFriendsList();
         LOG.log(Level.INFO, "Server: success - user changed status");
     }
 
@@ -201,6 +210,12 @@ public class ResponseHandler {
             user = localUser.getFriendByLogin(m[0]);
 
         return new Message(user, m[1], m[2], m[3]);
+    }
+
+    // response: 502|login|nick|description|logged_in|ID_conv
+    private void catchConvCreated(){
+        Conversation newConversation = createNewConv(response[1], response[2].split(","), new ArrayList<>());
+        localUser.getConversations().add(newConversation);
     }
 
 

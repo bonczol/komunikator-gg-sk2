@@ -15,4 +15,12 @@ public class ViewMenager {
     public static AddFriendController addFriendController;
     public static Parent loggInRoot;
     public static Parent menuRoot;
+
+    public static ChatController getChatContr(Conversation conversation){
+        for(ChatController c: chatControllers)
+            if(c.getConversation() == conversation)
+                return c;
+        return null;
+    }
+
 }

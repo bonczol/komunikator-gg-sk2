@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 public class Client {
     private boolean connected;
+    private String  serverIP;
     private static Client client;
     private Socket clientSocket;
     private Receiver receiver;
@@ -20,6 +21,10 @@ public class Client {
     private Client() {
         this.clientSocket = new Socket();
         this.connected = false;
+    }
+
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
     }
 
     public void connectToServer(String  serverIP, int port) {

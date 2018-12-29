@@ -104,4 +104,7 @@ public class ChatController implements Initializable {
         return message;
     }
 
+    public Conversation getConversation() {
+        return conversation;
+    }
 }
