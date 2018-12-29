@@ -5,6 +5,7 @@ import app.view.ChatController;
 import app.view.LogInController;
 import app.view.MenuController;
 import javafx.scene.Parent;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 

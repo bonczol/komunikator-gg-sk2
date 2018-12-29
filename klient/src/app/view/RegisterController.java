@@ -36,7 +36,8 @@ public class RegisterController {
 
     public void signUp(){
         if(!Client.getClient().isConnected()){
-            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.20", 1337))
+            CompletableFuture.runAsync(() -> Client.getClient().connectToServer(
+                    Client.getClient().getServerIP(), Client.getClient().getPort()))
                     .handle((res, ex) -> {
                         if (Client.getClient().isConnected())
                             sendSingUpMes();
