@@ -52,12 +52,6 @@ void handleConnection(int csd) {
 	pthread_t thread;
 	pthread_create(&thread, NULL, ThreadBehavior1, &csd);
 }
-/*
-void kill_handler(int signal){
-	ServerSerializer s;
-	s.serialize();
-	return;
-}*/
 
 
 void* connection_accepter(void *server_socket){
@@ -66,6 +60,15 @@ void* connection_accepter(void *server_socket){
 		int connection_socket_descriptor = accept(*server_socket_descriptor, NULL, NULL);
 		cout << "New connection on socket " << connection_socket_descriptor << endl;
 		handleConnection(connection_socket_descriptor);
+	}
+}
+
+void tell_everyone(){
+	string info = "600|FIN\n";
+	const char* msg = info.c_str();
+	for(auto const& log_k : Klient::CLIENTS) {
+		if(log_k.second->logged_in)
+			write(log_k.second->socket, msg, info.length());
 	}
 }
 
@@ -105,13 +108,6 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-/*
-	struct sigaction sigIntHandler;
-	sigIntHandler.sa_handler = kill_handler;
-	sigemptyset(&sigIntHandler.sa_mask);
-	sigIntHandler.sa_flags = 0;
-	sigaction(SIGINT, &sigIntHandler, NULL);*/
-
 	pthread_t thread;
 	pthread_create(&thread, NULL, connection_accepter, &server_socket_descriptor);
 
@@ -125,6 +121,7 @@ int main(int argc, char* argv[])
 	{
 		cin >> c;
 		if(c == 'c'){
+			tell_everyone();
 			s.serialize();
 			WORK = false;
 		}else if(c == 'k'){

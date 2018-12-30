@@ -15,6 +15,8 @@
 501 - friend o loginie login zaktualizował description lub logged_in
 502 - uzytkownik o loginie login, nicku nick, opisie description, logged_in utworzyl z tobą knwersację
 
+600 - serwer zakończył pracę w sposób bezpieczny
+
 100|ID_conv|wiadomosc						response: 400|0 lub 400|1
 101|login|haslo								response: 401|0 lub 401|nick|description|nick1,login1,description1,logged_in1,nick2,login2,description2,logged_in2...
 102|										response: 402|0 lub 402|1
@@ -31,3 +33,5 @@
 500|ID_conv|login,data,godzina,wiadomosc
 501|login|description|logged_in
 502|login|nick|description|logged_in|ID_conv
+
+600|FIN

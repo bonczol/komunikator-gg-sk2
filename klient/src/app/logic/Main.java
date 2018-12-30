@@ -26,7 +26,7 @@ public class Main extends Application {
                 Client.getClient().getSender().sendSignOutMessage();
         } );
 
-        primaryStage.getIcons().add(new Image("/resources/img/icons8-sms-48.png"));
+        primaryStage.getIcons().add(new Image("/img/icons8-sms-48.png"));
         primaryStage.setTitle("Bajdu");
         primaryStage.setScene(new Scene(root));
         primaryStage.sizeToScene();
