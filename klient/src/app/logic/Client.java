@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 
 public class Client {
     private boolean connected;
+    private String serverIP;
+    private int port;
     private static Client client;
     private Socket clientSocket;
     private Receiver receiver;
@@ -33,7 +35,25 @@ public class Client {
         } catch (IOException e) {
             LOG.info("Server unreachable");
             connected = false;
+            clientSocket = null;
+            clientSocket = new Socket();
         }
+    }
+
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getServerIP() {
+        return serverIP;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public static synchronized Client getClient() {

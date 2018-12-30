@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-public class LogInController {
+public class LogInController{
     @FXML
     private TextField textFieldLogin;
     @FXML
@@ -39,7 +39,7 @@ public class LogInController {
         labelInfo.setText("Conecting...");
 
         if(!Client.getClient().isConnected()){
-            CompletableFuture.runAsync(() -> Client.getClient().connectToServer("192.168.0.20", 1337))
+            CompletableFuture.runAsync(() -> Client.getClient().connectToServer(Client.getClient().getServerIP(), Client.getClient().getPort()))
                     .handle((res, ex) -> {
                         if (Client.getClient().isConnected())
                             Client.getClient().getSender().sendSignInMessage(textFieldLogin.getText(), passwordField.getText());
