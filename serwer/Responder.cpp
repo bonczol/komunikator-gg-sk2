@@ -126,9 +126,9 @@ void Responder::login(string buf){
 void Responder::logout(string buf){
 	if (this -> klient && this->klient->logged_in) {
 		cout << "Logout: " << this->klient->login << endl;
-		tell_his_friends();
 		send_info_code("402|1");
 		this->klient->logged_in = false;
+		tell_his_friends();
 		this->klient->socket = -1;
 		this->klient = NULL;
 		cout << "Udane\n";
@@ -168,7 +168,7 @@ void Responder::search(string buf){
 		int n = buf.length();
 		string temp = "404|";
 		pthread_mutex_lock(&Klient::clients_mutex);
-		for(auto const& log_k : Klient::CLIENTS) {\
+		for(auto const& log_k : Klient::CLIENTS) {
 			cout << buf << " " << log_k.first << " " << log_k.first.substr(0, n) << endl;
 			if(log_k.first.substr(0, n) == buf) {
 				temp += log_k.second->nick + "," + log_k.second->login + ",";
