@@ -3,6 +3,7 @@ package app.logic;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Message {
     private User author;
@@ -20,7 +21,7 @@ public class Message {
     public Message(String text) {
         this.author = Client.getClient().getUser();
         this.date = LocalDate.now().toString();
-        this.time = LocalTime.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("H:m"));
         this.text = text;
     }
 
