@@ -136,6 +136,11 @@ public class MenuController implements Initializable {
         }
     }
 
+    public void connectionLost(){
+        labelDescription.getStyleClass().add("labelConLost");
+        labelDescription.setText("Connection lost - try to sign in later");
+    }
+
 
 
 }

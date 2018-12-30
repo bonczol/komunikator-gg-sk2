@@ -48,6 +48,10 @@ public class Client {
         this.port = port;
     }
 
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
     public String getServerIP() {
         return serverIP;
     }

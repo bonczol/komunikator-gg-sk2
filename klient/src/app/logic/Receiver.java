@@ -22,11 +22,13 @@ public class Receiver implements Runnable{
         while(running){
             try {
                 message = reader.readLine();
-                System.out.println("---> Recived: " + message);
-                ResponseHandler responseHandler  = new ResponseHandler(
-                        message.split(Pattern.quote("|")), Client.getClient().getUser()
-                );
-                responseHandler.handleResponse();
+                if(message != null){
+                    System.out.println("---> Recived: " + message);
+                    ResponseHandler responseHandler  = new ResponseHandler(
+                            message.split(Pattern.quote("|")), Client.getClient().getUser()
+                    );
+                    responseHandler.handleResponse();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

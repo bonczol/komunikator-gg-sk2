@@ -1,6 +1,7 @@
 package app.logic;
 
 import app.view.ChatController;
+import javafx.application.Platform;
 
 import javax.swing.text.View;
 import java.util.ArrayList;
@@ -57,6 +58,9 @@ public class ResponseHandler {
                 break;
             case 502:
                 catchConvCreated();
+                break;
+            case 600:
+                catchServerOffline();
         }
     }
 
@@ -199,6 +203,23 @@ public class ResponseHandler {
         LOG.log(Level.INFO, "Server: success - user changed status");
     }
 
+
+    // response: 502|login|nick|description|logged_in|ID_conv
+    private void catchConvCreated(){
+        Conversation newConversation = createNewConv(response[1], response[2].split(","), new ArrayList<>());
+        localUser.getConversations().add(newConversation);
+        LOG.log(Level.INFO, "Server: friend created conversation with you");
+    }
+
+
+    // response: 600|FIN
+    private void catchServerOffline(){
+        Client.getClient().setConnected(false);
+        Platform.runLater(()->ViewMenager.menuController.connectionLost());
+        LOG.log(Level.INFO, "Server: offline");
+    }
+
+
     // Read message in format "login,data,godzina,wiadomosc"
     private Message readMessage(String message){
         String[] m = message.split(",");
@@ -211,12 +232,5 @@ public class ResponseHandler {
 
         return new Message(user, m[1], m[2], m[3]);
     }
-
-    // response: 502|login|nick|description|logged_in|ID_conv
-    private void catchConvCreated(){
-        Conversation newConversation = createNewConv(response[1], response[2].split(","), new ArrayList<>());
-        localUser.getConversations().add(newConversation);
-    }
-
 
 }
