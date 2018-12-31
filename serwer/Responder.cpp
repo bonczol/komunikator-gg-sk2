@@ -314,14 +314,21 @@ void Responder::change_description(string buf){
 void Responder::delete_friend(string buf){
 	//string login = buf;
 	pthread_mutex_lock(&this->klient->friends_mutex);
-	for (auto it = this->klient->friends.begin(); it != this->klient->friends.end(); ) {
+	for (auto it = this->klient->friends.begin(); it != this->klient->friends.end(); it++) {
         if ((*it)->login == buf) {
             this->klient->friends.erase(it);
             pthread_mutex_unlock(&this->klient->friends_mutex);
             send_info_code("410|1");
+            pthread_mutex_lock(&(*it)->friends_mutex);
+            for (auto it2 = (*it)->friends.begin(); it2 != (*it)->friends.end(); it2++) {
+            	if ((*it2)->login == this->klient->login){
+            		(*it)->friends.erase(it2);
+            		pthread_mutex_unlock(&(*it)->friends_mutex);
+            		return;
+            	}
+            }
+            pthread_mutex_unlock(&(*it)->friends_mutex);
             return;
-        } else {
-            ++it;
         }
     }
     pthread_mutex_unlock(&this->klient->friends_mutex);
@@ -362,7 +369,7 @@ bool Responder::sendMsg(Message*m, Klient* to) {
 	return true;
 }
 
-void Responder::check_for_unsent_msgs(){
+/*void Responder::check_for_unsent_msgs(){
 	pthread_mutex_lock(&Message::unsent_buffer_mutex);
 	for(auto const& m_k : Message::UNSENT_MSGS_BUFFER) {
 		if(m_k.second->login == this->klient->login && m_k.second->logged_in) {
@@ -372,7 +379,7 @@ void Responder::check_for_unsent_msgs(){
 	}
 	pthread_mutex_unlock(&Message::unsent_buffer_mutex);
 	return;
-}
+}*/
 
 list<string> Responder::split_string(string text, char sep, bool msg) {
 	string temp = "";

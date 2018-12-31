@@ -2,8 +2,10 @@
 
 void ServerSerializer::serialize() {
 	this->ALL_CONVS = Conversation::ALL_CONVS;
+	pthread_mutex_lock(&Klient::clients_mutex);
 	this->CLIENTS = Klient::CLIENTS;
-	this->UNSENT_MSGS = Message::UNSENT_MSGS_BUFFER;
+	pthread_mutex_unlock(&Klient::clients_mutex);
+	//this->UNSENT_MSGS = Message::UNSENT_MSGS_BUFFER;
 	std::ofstream ofs("serializedServer.txt");
 	boost::archive::text_oarchive oa(ofs);
 	oa << *this;
@@ -17,7 +19,7 @@ void ServerSerializer::deserialize()
 	ia >> *this;
 	Conversation::ALL_CONVS = this->ALL_CONVS;
 	Klient::CLIENTS = this->CLIENTS;
-	Message::UNSENT_MSGS_BUFFER = this->UNSENT_MSGS;
+	//Message::UNSENT_MSGS_BUFFER = this->UNSENT_MSGS;
 	return;
 }
 

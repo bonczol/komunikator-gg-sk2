@@ -15,15 +15,15 @@ private:
 	std::string padTo(std::string str, const size_t num = 2, const char paddingChar = '0');
 
 public:
-	static std::map<Message*, Klient*> UNSENT_MSGS_BUFFER; 
-	static pthread_mutex_t unsent_buffer_mutex;
+	//static std::map<Message*, Klient*> UNSENT_MSGS_BUFFER; 
+	//static pthread_mutex_t unsent_buffer_mutex;
 
 	Message(std::string msg, Klient* sender, int id_conv);
 	Message(){}
 	std::string getMsg() { return this->msg; }
 	std::string toString1();
 	std::string toString2();
-	static void push_to_unsent_buffer(Klient* k, Message* m);
+	//static void push_to_unsent_buffer(Klient* k, Message* m);
 	~Message();
 
 
