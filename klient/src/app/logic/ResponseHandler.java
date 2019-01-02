@@ -115,10 +115,11 @@ public class ResponseHandler {
                 break;
             case " ":
                 LOG.log(Level.INFO, "Server: fail- search for user - user not found");
+                ViewMenager.addFriendController.clearUsersList();
                 break;
             default:
                 ViewMenager.addFriendController.showSearchResults(response[1].split(","));
-                LOG.log(Level.INFO, "Server: success - search for user - error");
+                LOG.log(Level.INFO, "Server: success - user found");
                 break;
         }
     }

@@ -1,8 +1,6 @@
 package app.view;
 
 import app.logic.Client;
-import app.logic.Main;
-import app.logic.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,9 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -52,6 +48,10 @@ public class AddFriendController implements Initializable {
                 users.add(s);
             }
         });
+    }
+
+    public void clearUsersList(){
+        Platform.runLater(()->users.clear());
     }
 
     public void addUserToFriends(){
